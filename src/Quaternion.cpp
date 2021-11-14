@@ -3,7 +3,7 @@
 #include <iostream>
 #define sqr(x) x * x
 
-Quaternion::Quaternion(const Vector& axis, double angle) : Vector(axis.Normalized() * sin(angle / 2)) {
+Quaternion::Quaternion(const Vector& axis, float angle) : Vector(axis.Normalized() * sin(angle / 2)) {
     x = Vector::x;
     y = Vector::y;
     z = Vector::z;
@@ -12,14 +12,14 @@ Quaternion::Quaternion(const Vector& axis, double angle) : Vector(axis.Normalize
 Quaternion Quaternion::FromVector(const Vector& vector) {
 	return Quaternion(vector.x, vector.y, vector.z, 0);
 }
-Quaternion::Quaternion(double x, double y, double z, double w) {
+Quaternion::Quaternion(float x, float y, float z, float w) {
     this->x = x;
     this->y = y;
     this->z = z;
     this->w = w;
 }
 
-double Quaternion::Length() const {
+float Quaternion::Length() const {
 	return sqrt(sqr(x) + sqr(y) + sqr(z) + sqr(w));
 }
 Quaternion Quaternion::Normalized() const {
@@ -34,10 +34,10 @@ Vector Quaternion::Transform(const Vector& vec) const {
     return Vector(r.x, r.y, r.z);
 }
 
-Quaternion Quaternion::operator*(const double& val) const {
+Quaternion Quaternion::operator*(const float& val) const {
     return Quaternion(x * val, y * val, z * val, w * val);
 }
-Quaternion Quaternion::operator/(const double& val) const {
+Quaternion Quaternion::operator/(const float& val) const {
 	return *this * (1 / val);
 }
 

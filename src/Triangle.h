@@ -7,9 +7,9 @@ private:
     class Vertex {
     private:
         Angle angle;
-        double magnitude;
+        float magnitude;
     public:
-        Vertex(Angle ang, double mag) {
+        Vertex(Angle ang, float mag) {
             angle = ang;
             magnitude = mag;
         }

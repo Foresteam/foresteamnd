@@ -4,9 +4,9 @@
 void Matrix::Init(int rows, int cols) {
 	this->rows = rows;
 	this->cols = cols;
-	self = new double*[rows];
+	self = new float*[rows];
 	for (int i = 0; i < rows; i++)
-		self[i] = new double[cols]();
+		self[i] = new float[cols]();
 }
 void Matrix::Copy(const Matrix& other) {
 	for (int i = 0; i < rows; i++)
@@ -17,7 +17,7 @@ void Matrix::Copy(const Matrix& other) {
 // 	self = nullptr;
 // 	rows = 0, cols = 0;
 // }
-Matrix::Matrix(int rows, int cols, double** array) {
+Matrix::Matrix(int rows, int cols, float** array) {
 	Init(rows, cols);
     
     if (array)
@@ -41,19 +41,19 @@ void Matrix::Fill1() {
 	for (int i = 0; i < rows; i++)
 		self[i][i] = 1;
 }
-void Matrix::Manipulate(Matrix& m, int toBeAdded, int addTo, double k) {
+void Matrix::Manipulate(Matrix& m, int toBeAdded, int addTo, float k) {
 	for (int i = 0; i < m.cols; i++)
 		m[addTo][i] += m[toBeAdded][i] * k;
 }
-void Matrix::Manipulate(Matrix& m, Matrix& pair, int toBeAdded, int addTo, double k) {
+void Matrix::Manipulate(Matrix& m, Matrix& pair, int toBeAdded, int addTo, float k) {
 	Manipulate(m, toBeAdded, addTo, k);
 	Manipulate(pair, toBeAdded, addTo, k);
 }
-void Matrix::Manipulate(Matrix& m, int toChange, double k) {
+void Matrix::Manipulate(Matrix& m, int toChange, float k) {
 	for (int i = 0; i < m.cols; i++)
 		m[toChange][i] *= k;
 }
-void Matrix::Manipulate(Matrix& m, Matrix& pair, int toChange, double k) {
+void Matrix::Manipulate(Matrix& m, Matrix& pair, int toChange, float k) {
 	Manipulate(m, toChange, k);
 	Manipulate(pair, toChange, k);
 }
@@ -109,7 +109,7 @@ Matrix Matrix::operator-() {
 			Matrix::Manipulate(copy, result, i, j, -copy[j][i]);
 	return result;
 }
-Matrix Matrix::operator*(const double& a) {
+Matrix Matrix::operator*(const float& a) {
 	Matrix result = Matrix(*this);
 	for (int i = 0; i < rows; i++)
 		for (int j = 0; j < cols; j++)
@@ -124,20 +124,20 @@ Matrix Matrix::operator*(const Matrix& other) {
 				result[i][j] += self[i][k] * other[k][j];
 	return result;
 }
-Matrix Matrix::operator/(const double& a) {
+Matrix Matrix::operator/(const float& a) {
 	return (*this) * (1 / a);
 }
-double* Matrix::operator[](const int& index) const {
+float* Matrix::operator[](const int& index) const {
     return self[index];
 }
 
-double Matrix::Det() {
+float Matrix::Det() {
 	if (rows == 1)
 		return self[0][0];
 	if (rows == 2)
 		return self[0][0] * self[1][1] - self[1][0] * self[0][1];
 
-	double det = 0;
+	float det = 0;
 	for (int i = 0; i < rows; i++)
 		det += (i % 2 == 0 ? 1 : -1) * self[i][0] * Cropped(i, 0).Det();
 

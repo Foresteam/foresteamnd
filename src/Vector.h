@@ -5,8 +5,8 @@
 
 class Vector {
 public:
-	double x, y, z;
-	Vector(double x, double y, double z);
+	float x, y, z;
+	Vector(float x, float y, float z);
 	Vector(const Vector& other);
 	Vector& operator=(const Vector& other);
 	Vector();
@@ -17,9 +17,9 @@ public:
 	Vector operator-(const Vector& v2) const;
 	void operator-=(const Vector& v2);
 	void operator+=(const Vector& v2);
-	double operator*(const Vector& v2) const;
-	Vector operator/(const double& n) const;
-	Vector operator*(const double& n) const;
+	float operator*(const Vector& v2) const;
+	Vector operator/(const float& n) const;
+	Vector operator*(const float& n) const;
 	bool operator==(const Vector& v2) const;
 
 	// For rendering.
@@ -29,15 +29,15 @@ public:
 	Vector Cross(const Vector& v2) const;
 	// @param v2 Other Vector
 	// @return The dot product of the vector and v2
-	double Dot(const Vector& v2) const;
+	float Dot(const Vector& v2) const;
 	// @param v2 Other Vector
 	// @return The distance between the vector and v2
-	double Distance(const Vector& v2) const;
-	double Length() const;
+	float Distance(const Vector& v2) const;
+	float Length() const;
 	// @return Vector with length of 1
 	Vector Normalized() const;
 	Vector Angle() const;
-	
+
 	// @return (x, y, z)
 	std::string virtual ToString() const;
 };

@@ -22,7 +22,7 @@ float Triangle::sign(Vector2 p1, Vector2 p2, Vector2 p3) {
 }
 
 bool Triangle::Contains(Vector2 point) {
-	double d1, d2, d3;
+	float d1, d2, d3;
 	bool has_neg, has_pos;
 
 	d1 = sign(point, GetPoint(0), GetPoint(1));

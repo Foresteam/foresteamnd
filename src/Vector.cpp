@@ -1,7 +1,7 @@
 #include "Vector.h"
 using namespace std;
 
-Vector::Vector(double x, double y, double z) {
+Vector::Vector(float x, float y, float z) {
 	this->x = x;
 	this->y = y;
 	this->z = z;
@@ -39,13 +39,13 @@ void Vector::operator-=(const Vector& v2) {
 void Vector::operator+=(const Vector& v2) {
 	*this = *this + v2;
 }
-double Vector::operator*(const Vector& v2) const {
+float Vector::operator*(const Vector& v2) const {
 	return this->Dot(v2);
 }
-Vector Vector::operator/(const double& n) const {
+Vector Vector::operator/(const float& n) const {
 	return Vector(x / n, y / n, z / n);
 }
-Vector Vector::operator*(const double& n) const {
+Vector Vector::operator*(const float& n) const {
 	return Vector(x * n, y * n, z * n);
 }
 bool Vector::operator==(const Vector& v2) const {
@@ -59,17 +59,17 @@ Vector Vector::Cross(const Vector& v2) const {
 	out.z = x * v2.y - y * v2.x;
 	return out;
 }
-double Vector::Dot(const Vector& v2) const {
-	double prod = 0;
+float Vector::Dot(const Vector& v2) const {
+	float prod = 0;
 	prod += x * v2.x;
 	prod += y * v2.y;
 	prod += z * v2.z;
 	return prod;
 }
-double Vector::Distance(const Vector& v2) const {
+float Vector::Distance(const Vector& v2) const {
 	return sqrt(pow(x - v2.x, 2) + pow(y - v2.y, 2) + pow(z - v2.z, 2));
 }
-double Vector::Length() const {
+float Vector::Length() const {
 	return Distance(Vector(0, 0, 0));
 }
 Vector Vector::Normalized() const {

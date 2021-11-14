@@ -5,9 +5,9 @@ namespace Utils {
     // @param from Random start
     // @param to Random end
     // @return Random value in range [from, to]
-    double RandRange(double from, double to);
+    float RandRange(float from, float to);
 	// @param to Random end
 	// @return Random value in range [0, to]
-	double RandRange(double to);
-	double RoundTo(double val, int k);
+	float RandRange(float to);
+	float RoundTo(float val, int k);
 }

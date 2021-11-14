@@ -1,13 +1,13 @@
 #include "Utils.h"
 
-double Utils::RandRange(double from, double to) {
-	return ((double)rand() / RAND_MAX) * (to - from) + from;
+float Utils::RandRange(float from, float to) {
+	return ((float)rand() / RAND_MAX) * (to - from) + from;
 }
-double Utils::RandRange(double to) {
+float Utils::RandRange(float to) {
 	return RandRange(0, to);
 }
 
-double Utils::RoundTo(double val, int k) {
+float Utils::RoundTo(float val, int k) {
 	val *= pow(10, k);
 	val = round(val);
 	val /= pow(10, k);
