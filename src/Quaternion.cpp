@@ -4,18 +4,12 @@
 #define sqr(x) x * x
 
 Quaternion::Quaternion(const Vector& axis, float angle) : Vector(axis.Normalized() * sin(angle / 2)) {
-    x = Vector::x;
-    y = Vector::y;
-    z = Vector::z;
     w = cos(angle / 2);
 }
 Quaternion Quaternion::FromVector(const Vector& vector) {
 	return Quaternion(vector.x, vector.y, vector.z, 0);
 }
-Quaternion::Quaternion(float x, float y, float z, float w) {
-    this->x = x;
-    this->y = y;
-    this->z = z;
+Quaternion::Quaternion(float x, float y, float z, float w) : Vector(x, y, z) {
     this->w = w;
 }
 
@@ -29,9 +23,8 @@ Quaternion Quaternion::Inverted() const {
     return Quaternion(-x, -y, -z, w).Normalized();
 }
 
-Vector Quaternion::Transform(const Vector& vec) const {
-	Quaternion r = *this * FromVector(vec) * this->Inverted();
-    return Vector(r.x, r.y, r.z);
+void Quaternion::Rotate(Vector& vector) {
+    vector = vector * *this;
 }
 
 Quaternion Quaternion::operator*(const float& val) const {
@@ -62,4 +55,12 @@ Quaternion::Quaternion(const Quaternion& other) {
 	y = other.y;
 	z = other.z;
 	w = other.w;
+}
+
+Vector operator*(const Quaternion& q, const Vector& v) {
+	Quaternion r = q * Quaternion::FromVector(v) * q.Inverted();
+    return Vector(r.x, r.y, r.z);
+}
+Vector operator*(const Vector& v, const Quaternion& q) {
+    return q * v;
 }

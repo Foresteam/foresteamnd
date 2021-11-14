@@ -3,7 +3,7 @@
 
 class Quaternion : public Vector {
 public:
-    float x, y, z, w;
+    float w;
     /// @param axis Axis to rotate around
     /// @param angle Angle in radians
     Quaternion(const Vector& axis, float angle);
@@ -15,12 +15,21 @@ public:
     Quaternion Normalized() const;
     Quaternion Inverted() const;
 
-    Vector Transform(const Vector& vec) const;
+    // Rotates vector
+    void Rotate(Vector& vector);
 
     Quaternion operator*(const float& val) const;
     Quaternion operator/(const float& val) const;
     
+    /// Summs Quaternions
     Quaternion operator*(const Quaternion& other) const;
 
     static Quaternion FromVector(const Vector& vector);
 };
+
+/// Rotates Vector v using Quaternion q
+/// @returns Rotated Vector
+Vector operator*(const Quaternion& q, const Vector& v);
+/// Rotates Vector v using Quaternion q
+/// @returns Rotated Vector
+Vector operator*(const Vector& v, const Quaternion& q);
