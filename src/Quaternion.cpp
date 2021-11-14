@@ -13,6 +13,7 @@ Quaternion Quaternion::FromVector(const Vector& vector) {
 Quaternion::Quaternion(float x, float y, float z, float w) : Vector(x, y, z) {
     this->w = w;
 }
+Quaternion::Quaternion() : Quaternion(0, 0, 0, 0) {}
 
 string Quaternion::ToString() const {
     return "Quaternion" + Utils::WrappedInBrackets(4, x, y, z, w);
@@ -68,4 +69,8 @@ Vector operator*(const Quaternion& q, const Vector& v) {
 }
 Vector operator*(const Vector& v, const Quaternion& q) {
     return q * v;
+}
+
+Vector& operator*=(Vector& v, const Quaternion& q) {
+    return v = v * q;
 }

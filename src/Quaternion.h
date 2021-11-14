@@ -9,6 +9,7 @@ public:
     Quaternion(const Vector& axis, float angle);
     Quaternion(float x, float y, float z, float w);
     Quaternion(const Quaternion& other);
+    Quaternion();
     Quaternion& operator=(const Quaternion& other);
 
     float Length() const;
@@ -35,3 +36,5 @@ Vector operator*(const Quaternion& q, const Vector& v);
 /// Rotates Vector v using Quaternion q
 /// @returns Rotated Vector
 Vector operator*(const Vector& v, const Quaternion& q);
+
+Vector& operator*=(Vector& v, const Quaternion& q);

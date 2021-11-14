@@ -7,14 +7,12 @@ Triangle::Triangle(Vector a, Vector b, Vector c) {
 }
 void Triangle::CalcVerteces(Vector* base) {
 	this->base = base;
-	verteces[0] = Vertex::FromPoint(_points[0], base);
-	verteces[1] = Vertex::FromPoint(_points[1], base);
-	verteces[2] = Vertex::FromPoint(_points[2], base);
-	int a = 0;
+	for (int i = 0; i < 3; i++)
+		verteces[i] = _points[i] - *base;
 }
 
 Vector Triangle::GetPoint(int n) {
-	return verteces[n].ToPoint(base);
+	return verteces[n] + *base;
 }
 
 float Triangle::sign(Vector2 p1, Vector2 p2, Vector2 p3) {
@@ -45,18 +43,7 @@ Vector Triangle::GetPointProjection(Vector point) {
 Vector* Triangle::GetPoints() {
 	return new Vector[3] { GetPoint(0), GetPoint(1), GetPoint(2) };
 }
-void Triangle::Rotate(Angle ang) {
+void Triangle::Rotate(Quaternion rotation) {
 	for (int i = 0; i < 3; i++)
-		verteces[i].Rotate(ang);
-}
-
-Triangle::Vertex Triangle::Vertex::FromPoint(Vector point, Vector* base) {
-	Vector d = point - *base;
-	auto a = d.Angle();
-	return Vertex(d.Angle(), d.GetLength());
-}
-Vector Triangle::Vertex::ToPoint(Vector* base) {
-	auto v = Vector(cos(angle.x), sin(angle.x), cos(angle.y));
-	auto _ = v.GetLength();
-	return *base + v * magnitude;
+		verteces[i] *= rotation;
 }

@@ -7,9 +7,8 @@ protected:
 	float** self;
 	int rows, cols;
 	void Init(int rows, int cols);
-    /// @deprecated Matrix can now be initialized directly from float[][]
-	void Copy(const Matrix& other);
 public:
+	void Copy(const Matrix& other);
 	Matrix& operator=(const Matrix& other);
     /// @param array An array of float to initialize from
 	Matrix(int rows, int cols, float** array = nullptr);

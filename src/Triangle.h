@@ -1,36 +1,21 @@
 #pragma once
 #include "Vector2.h"
+#include "Quaternion.h"
 
 class Triangle {
 private:
 	float sign(Vector2 p1, Vector2 p2, Vector2 p3);
-    class Vertex {
-    private:
-        Angle angle;
-        float magnitude;
-    public:
-        Vertex(Angle ang, float mag) {
-            angle = ang;
-            magnitude = mag;
-        }
-        Vertex() : Vertex(Angle(), 0) {}
-        static Vertex FromPoint(Vector point, Vector* base);
-        
-        Vector ToPoint(Vector* base);
-        void Rotate(Vector angle) {
-            this->angle += angle;
-        }
-    };
-	Vertex verteces[3];
+	Vector verteces[3];
     Vector* base;
-    Vector GetPoint(int n);
+    Quaternion rotation;
 public:
     Vector _points[3];
 	Triangle(Vector a, Vector b, Vector c);
     void CalcVerteces(Vector* base);
 
+    Vector GetPoint(int n);
     Vector* GetPoints();
-    void Rotate(Angle ang);
+    void Rotate(Quaternion rotation);
 
 	bool Contains(Vector2 point);
     Vector GetNormal();

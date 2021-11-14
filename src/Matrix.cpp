@@ -18,12 +18,13 @@ void Matrix::Copy(const Matrix& other) {
 // 	rows = 0, cols = 0;
 // }
 Matrix::Matrix(int rows, int cols, float** array) {
-	Init(rows, cols);
-    
-    if (array)
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; j < cols; j++)
-                self[i][j] = array[i][j];
+    if (array) {
+		this->rows = rows;
+		this->cols = cols;
+		this->self = array;
+	}
+	else
+		Init(rows, cols);
 }
 Matrix::Matrix(const Matrix& other) : Matrix::Matrix(other.rows, other.cols) {
 	Copy(other);
@@ -117,9 +118,9 @@ Matrix Matrix::operator*(const float& a) {
 	return result;
 }
 Matrix Matrix::operator*(const Matrix& other) {
-	Matrix result = Matrix(rows, cols);
+	Matrix result = Matrix(rows, other.cols);
 	for (int i = 0; i < rows; i++)
-		for (int j = 0; j < cols; j++)
+		for (int j = 0; j < other.cols; j++)
 			for (int k = 0; k < cols; k++)
 				result[i][j] += self[i][k] * other[k][j];
 	return result;

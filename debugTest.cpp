@@ -1,4 +1,5 @@
 #include "src/Quaternion.h"
+#include "src/Matrix.h"
 #include <cmath>
 #include <iostream>
 using namespace std;
