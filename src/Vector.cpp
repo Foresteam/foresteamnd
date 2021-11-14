@@ -1,4 +1,5 @@
 #include "Vector.h"
+#include "Utils.h"
 using namespace std;
 
 Vector::Vector(float x, float y, float z) {
@@ -82,14 +83,5 @@ Vector Vector::Angle() const {
 	return out;
 }
 string Vector::ToString() const {
-	stringstream ss;
-	ss << "(";
-	ss << x;
-	ss << ", ";
-	ss << y;
-	ss << ", ";
-	ss << z;
-	ss << ")";
-
-	return string(istreambuf_iterator<char>(ss), {});
+	return "Vector3D" + Utils::WrappedInBrackets(3, x, y, z);
 }

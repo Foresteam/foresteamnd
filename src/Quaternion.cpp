@@ -1,6 +1,7 @@
 #include "Quaternion.h"
+#include "Utils.h"
 #include <cmath>
-#include <iostream>
+using namespace std;
 #define sqr(x) x * x
 
 Quaternion::Quaternion(const Vector& axis, float angle) : Vector(axis.Normalized() * sin(angle / 2)) {
@@ -11,6 +12,10 @@ Quaternion Quaternion::FromVector(const Vector& vector) {
 }
 Quaternion::Quaternion(float x, float y, float z, float w) : Vector(x, y, z) {
     this->w = w;
+}
+
+string Quaternion::ToString() const {
+    return "Quaternion" + Utils::WrappedInBrackets(4, x, y, z, w);
 }
 
 float Quaternion::Length() const {

@@ -24,6 +24,8 @@ public:
     /// Summs Quaternions
     Quaternion operator*(const Quaternion& other) const;
 
+    std::string ToString() const;
+
     static Quaternion FromVector(const Vector& vector);
 };
 
