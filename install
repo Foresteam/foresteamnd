@@ -1,2 +1,4 @@
-cp -r src/*.h /usr/local/include
+mkdir /usr/local/include/foresteamnd
+rm /usr/local/include/foresteamnd/*
+cp -r src/*.h /usr/local/include/foresteamnd
 cp build/libforesteamnd.a /usr/local/lib

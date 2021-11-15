@@ -28,20 +28,20 @@ bool Vector::operator<(const Vector& v) const {
 bool Vector::operator>(const Vector& v) const {
 	return !(*this < v);
 }
-Vector Vector::operator+(const Vector& v2) const {
-	return Vector(x + v2.x, y + v2.y, z + v2.z);
+Vector Vector::operator+(const Vector& other) const {
+	return Vector(x + other.x, y + other.y, z + other.z);
 }
-Vector Vector::operator-(const Vector& v2) const {
-	return Vector(x - v2.x, y - v2.y, z - v2.z);
+Vector Vector::operator-(const Vector& other) const {
+	return Vector(x - other.x, y - other.y, z - other.z);
 }
-void Vector::operator-=(const Vector& v2) {
-	*this = *this - v2;
+void Vector::operator-=(const Vector& other) {
+	*this = *this - other;
 }
-void Vector::operator+=(const Vector& v2) {
-	*this = *this + v2;
+void Vector::operator+=(const Vector& other) {
+	*this = *this + other;
 }
-float Vector::operator*(const Vector& v2) const {
-	return this->Dot(v2);
+float Vector::operator*(const Vector& other) const {
+	return this->Dot(other);
 }
 Vector Vector::operator/(const float& n) const {
 	return Vector(x / n, y / n, z / n);
@@ -49,26 +49,26 @@ Vector Vector::operator/(const float& n) const {
 Vector Vector::operator*(const float& n) const {
 	return Vector(x * n, y * n, z * n);
 }
-bool Vector::operator==(const Vector& v2) const {
-	return x == v2.x && y == v2.y && z == v2.z;
+bool Vector::operator==(const Vector& other) const {
+	return x == other.x && y == other.y && z == other.z;
 }
 
-Vector Vector::Cross(const Vector& v2) const {
+Vector Vector::Cross(const Vector& other) const {
 	Vector out = Vector();
-	out.x = y * v2.z - z * v2.y;
-	out.y = z * v2.x - x * v2.z;
-	out.z = x * v2.y - y * v2.x;
+	out.x = y * other.z - z * other.y;
+	out.y = z * other.x - x * other.z;
+	out.z = x * other.y - y * other.x;
 	return out;
 }
-float Vector::Dot(const Vector& v2) const {
+float Vector::Dot(const Vector& other) const {
 	float prod = 0;
-	prod += x * v2.x;
-	prod += y * v2.y;
-	prod += z * v2.z;
+	prod += x * other.x;
+	prod += y * other.y;
+	prod += z * other.z;
 	return prod;
 }
-float Vector::Distance(const Vector& v2) const {
-	return sqrt(pow(x - v2.x, 2) + pow(y - v2.y, 2) + pow(z - v2.z, 2));
+float Vector::Distance(const Vector& other) const {
+	return sqrt(pow(x - other.x, 2) + pow(y - other.y, 2) + pow(z - other.z, 2));
 }
 float Vector::Length() const {
 	return Distance(Vector(0, 0, 0));

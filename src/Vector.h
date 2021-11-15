@@ -13,31 +13,37 @@ public:
 
 	bool operator<(const Vector& v) const;
 	bool operator>(const Vector& v) const;
-	Vector operator+(const Vector& v2) const;
-	Vector operator-(const Vector& v2) const;
-	void operator-=(const Vector& v2);
-	void operator+=(const Vector& v2);
-	float operator*(const Vector& v2) const;
+	Vector operator+(const Vector& other) const;
+	Vector operator-(const Vector& other) const;
+	void operator-=(const Vector& other);
+	void operator+=(const Vector& other);
+	float operator*(const Vector& other) const;
 	Vector operator/(const float& n) const;
 	Vector operator*(const float& n) const;
-	bool operator==(const Vector& v2) const;
+	bool operator==(const Vector& other) const;
 
-	// For rendering.
+	/// For rendering.
 	Vector WrapScreen();
-	// @param v2 Other Vector
-	// @return The cross product of the vector and v2
-	Vector Cross(const Vector& v2) const;
-	// @param v2 Other Vector
-	// @return The dot product of the vector and v2
-	float Dot(const Vector& v2) const;
-	// @param v2 Other Vector
-	// @return The distance between the vector and v2
-	float Distance(const Vector& v2) const;
+
+	/// @param other Other Vector
+	/// @return The cross product of the vector and other
+	Vector Cross(const Vector& other) const;
+
+	/// @param other Other Vector
+	/// @return The dot product of the vector and other
+	float Dot(const Vector& other) const;
+
+	/// @param other Vector to calculate distance to
+	/// @return The distance between the vector and other
+	float Distance(const Vector& other) const;
+
 	float Length() const;
-	// @return Vector with length of 1
+
+	/// @return Vector with length of 1
 	Vector Normalized() const;
+
 	Vector Angle() const;
 
-	// @return (x, y, z)
+	/// @return (x, y, z)
 	std::string virtual ToString() const;
 };

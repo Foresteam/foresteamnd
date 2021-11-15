@@ -4,8 +4,8 @@
 class Vector2 : public Vector {
 public:
 	Vector2(float x, float y);
-	Vector2(const Vector& vec);
+	Vector2(const Vector& other);
 	Vector2();
-	// @return (x, y)
+	/// @returns (x, y)
 	std::string ToString() const override;
 };
