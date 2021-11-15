@@ -12,7 +12,7 @@ Quaternion Quaternion::FromVector(const Vector& vector) {
 Quaternion::Quaternion(float x, float y, float z, float w) : Vector(x, y, z) {
     this->w = w;
 }
-Quaternion::Quaternion() : Quaternion(0, 0, 0, 0) {}
+Quaternion::Quaternion() : Quaternion(0, 0, 0, 1) {}
 
 string Quaternion::ToString() const {
     return "Quaternion" + Utils::WrappedInBrackets(4, x, y, z, w);

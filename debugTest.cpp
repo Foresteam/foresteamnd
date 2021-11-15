@@ -22,6 +22,7 @@ int main(int, char**) {
 	Test("'axis'", axis.ToString().c_str(), "Vector3D(0, 1, 0)", passed, total);
 	Test("'target'", target.ToString().c_str(), "Vector3D(1, 0, 0)", passed, total);
 	Test("'q'", q.ToString().c_str(), "Quaternion(0, 0.707107, 0, 0.707107)", passed, total);
+	Test("'target', rotated 0deg", (Quaternion() * target).ToString(), "Vector3D(1, 0, 0)", passed, total);
 	target = (q * target);
 	Test("'target', rotated around 'axis' 90deg", target.ToString().c_str(), "Vector3D(0, 0, -1)", passed, total);
 	Test("'target', rotated back 90deg", (target * Quaternion(axis, -acos(0))).ToString().c_str(), "Vector3D(1, 0, 0)", passed, total);
