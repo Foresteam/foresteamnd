@@ -1,5 +1,6 @@
 #include "src/Quaternion.h"
 #include "src/Matrix.h"
+#include "src/Utils.h"
 #include <cmath>
 #include <iostream>
 using namespace std;
@@ -14,7 +15,7 @@ void Test(string prefix, string a, string b, int& passed, int& total) {
 int main(int, char**) {
 	Vector axis = Vector(0, 1, 0);
 	Vector target = Vector(1, 0, 0);
-	Quaternion q = Quaternion(axis, acos(0));
+	Quaternion q = Quaternion(axis, 90 * DEG2RAD);
 
 	printf("*Tests*\n");
 	int total = 0, passed = 0;

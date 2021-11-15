@@ -1,6 +1,7 @@
 #include "Utils.h"
 #include <sstream>
 #include <cstdarg>
+#include <cmath>
 using namespace std;
 
 float Utils::RandRange(float from, float to) {

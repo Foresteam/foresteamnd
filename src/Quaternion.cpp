@@ -2,7 +2,6 @@
 #include "Utils.h"
 #include <cmath>
 using namespace std;
-#define sqr(x) x * x
 
 Quaternion::Quaternion(const Vector& axis, float angle) : Vector(axis.Normalized() * sin(angle / 2)) {
     w = cos(angle / 2);
@@ -29,7 +28,7 @@ Quaternion Quaternion::Inverted() const {
     return Quaternion(-x, -y, -z, w).Normalized();
 }
 
-void Quaternion::Rotate(Vector& vector) {
+void Quaternion::Transform(Vector& vector) {
     vector = vector * *this;
 }
 
@@ -73,4 +72,7 @@ Vector operator*(const Vector& v, const Quaternion& q) {
 
 Vector& operator*=(Vector& v, const Quaternion& q) {
     return v = v * q;
+}
+Vector& operator*=(Quaternion& q0, const Quaternion& q) {
+    return q0 = q0 * q;
 }

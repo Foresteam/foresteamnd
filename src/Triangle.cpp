@@ -46,4 +46,5 @@ Vector* Triangle::GetPoints() {
 void Triangle::Rotate(Quaternion rotation) {
 	for (int i = 0; i < 3; i++)
 		verteces[i] *= rotation;
+	this->rotation *= rotation;
 }

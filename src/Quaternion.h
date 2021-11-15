@@ -16,8 +16,8 @@ public:
     Quaternion Normalized() const;
     Quaternion Inverted() const;
 
-    // Rotates vector
-    void Rotate(Vector& vector);
+    // Transforms vector
+    void Transform(Vector& vector);
 
     Quaternion operator*(const float& val) const;
     Quaternion operator/(const float& val) const;
@@ -38,3 +38,4 @@ Vector operator*(const Quaternion& q, const Vector& v);
 Vector operator*(const Vector& v, const Quaternion& q);
 
 Vector& operator*=(Vector& v, const Quaternion& q);
+Vector& operator*=(Quaternion& q0, const Quaternion& q);
