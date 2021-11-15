@@ -17,7 +17,11 @@ public:
     Vector* GetPoints();
     void Rotate(Quaternion rotation);
 
-	bool Contains(Vector2 point);
-    Vector GetNormal();
-    Vector GetPointProjection(Vector point);
+    /// @param point A point on the screen
+	bool PlaneContains(Vector2 point);
+    /// @returns The normal Vector of the plane
+    Vector PlaneNormal();
+    /// @param point A point in the world space
+    /// @returns Projection of the point onto the plane
+    Vector PlanePointProjection(Vector point);
 };

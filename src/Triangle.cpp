@@ -19,7 +19,7 @@ float Triangle::sign(Vector2 p1, Vector2 p2, Vector2 p3) {
 	return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
 }
 
-bool Triangle::Contains(Vector2 point) {
+bool Triangle::PlaneContains(Vector2 point) {
 	float d1, d2, d3;
 	bool has_neg, has_pos;
 
@@ -32,11 +32,11 @@ bool Triangle::Contains(Vector2 point) {
 
 	return !(has_neg && has_pos);
 }
-Vector Triangle::GetNormal() {
+Vector Triangle::PlaneNormal() {
     return (GetPoint(1) - GetPoint(0)).Cross(GetPoint(2) - GetPoint(0)).Normalized();
 }
-Vector Triangle::GetPointProjection(Vector point) {
-    Vector n = GetNormal();
+Vector Triangle::PlanePointProjection(Vector point) {
+    Vector n = PlaneNormal();
     return point - n * (point - GetPoint(0)).Dot(n);
 }
 

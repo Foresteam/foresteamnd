@@ -26,24 +26,24 @@ public:
 	Vector WrapScreen();
 
 	/// @param other Other Vector
-	/// @return The cross product of the vector and other
+	/// @returns The cross product of the vector and other
 	Vector Cross(const Vector& other) const;
 
 	/// @param other Other Vector
-	/// @return The dot product of the vector and other
+	/// @returns The dot product of the vector and other
 	float Dot(const Vector& other) const;
 
 	/// @param other Vector to calculate distance to
-	/// @return The distance between the vector and other
+	/// @returns The distance between the vector and other
 	float Distance(const Vector& other) const;
 
 	float Length() const;
 
-	/// @return Vector with length of 1
+	/// @returns Vector with length of 1
 	Vector Normalized() const;
 
 	Vector Angle() const;
 
-	/// @return (x, y, z)
+	/// @returns Vector3D(x, y, z)
 	std::string virtual ToString() const;
 };
