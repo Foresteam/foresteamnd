@@ -19,6 +19,7 @@ set(BUILD_FILES
     src/Matrix.cpp
     src/Quaternion.cpp
     src/Triangle.cpp
+    src/Stack.tcc
 )
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)

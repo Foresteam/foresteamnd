@@ -1,7 +1,7 @@
 #include "src/Quaternion.h"
 #include "src/Matrix.h"
 #include "src/Utils.h"
-#include "src/Stack.h"
+#include "src/Stack.tcc"
 #include <cmath>
 #include <iostream>
 using namespace std;
