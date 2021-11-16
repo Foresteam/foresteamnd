@@ -11,6 +11,7 @@ set(BUILD_FILES
     src/Matrix.h
     src/Quaternion.h
     src/Triangle.h
+    src/Stack.h
     
     src/Vector.cpp
     src/Vector2.cpp

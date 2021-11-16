@@ -1,11 +1,13 @@
 #include "src/Quaternion.h"
 #include "src/Matrix.h"
 #include "src/Utils.h"
+#include "src/Stack.h"
 #include <cmath>
 #include <iostream>
 using namespace std;
 
-void Test(string prefix, string a, string b, int& passed, int& total) {
+int total = 0, passed = 0;
+void Test(string prefix, string a, string b) {
 	total++;
 	bool ok = a.compare(b.c_str()) == 0;
 	passed += ok;
@@ -13,19 +15,31 @@ void Test(string prefix, string a, string b, int& passed, int& total) {
 }
 
 int main(int, char**) {
+	printf("*Tests*\n");
+
 	Vector axis = Vector(0, 1, 0);
 	Vector target = Vector(1, 0, 0);
 	Quaternion q = Quaternion(axis, 90 * DEG2RAD);
-
-	printf("*Tests*\n");
-	int total = 0, passed = 0;
-	Test("'axis'", axis.ToString().c_str(), "Vector3D(0, 1, 0)", passed, total);
-	Test("'target'", target.ToString().c_str(), "Vector3D(1, 0, 0)", passed, total);
-	Test("'q'", q.ToString().c_str(), "Quaternion(0, 0.707107, 0, 0.707107)", passed, total);
-	Test("'target', rotated 0deg", (Quaternion() * target).ToString(), "Vector3D(1, 0, 0)", passed, total);
+	printf("Quaternion tests\n");
+	Test("'axis'", axis.ToString().c_str(), "Vector3D(0, 1, 0)");
+	Test("'target'", target.ToString().c_str(), "Vector3D(1, 0, 0)");
+	Test("'q'", q.ToString().c_str(), "Quaternion(0, 0.707107, 0, 0.707107)");
+	Test("'target', rotated 0deg", (Quaternion() * target).ToString(), "Vector3D(1, 0, 0)");
 	target = (q * target);
-	Test("'target', rotated around 'axis' 90deg", target.ToString().c_str(), "Vector3D(0, 0, -1)", passed, total);
-	Test("'target', rotated back 90deg", (target * Quaternion(axis, -acos(0))).ToString().c_str(), "Vector3D(1, 0, 0)", passed, total);
+	Test("'target', rotated around 'axis' 90deg", target.ToString().c_str(), "Vector3D(0, 0, -1)");
+	Test("'target', rotated back 90deg", (target * Quaternion(axis, -acos(0))).ToString().c_str(), "Vector3D(1, 0, 0)");
+
+	Stack<Vector> vectors;
+	vectors.Push(Vector(1, 2, 3));
+	vectors.Push(Vector(4, 5, 6));
+	vectors.Push(Vector(7, 8, 9));
+	vectors.Rot();
+	printf("Stack tests\n");
+	Test("'vectors', rotated once[2], pop", vectors.Pop().ToString(), "Vector3D(1, 2, 3)");
+	vectors.Drop();
+	printf("'vectors', rotated once[1], drop\n");
+	Test("'vectors', rotated once[0], peek", vectors.Peek()->ToString(), "Vector3D(4, 5, 6)");
+	Test("'vectors', rotated once[0], pop", vectors.Pop().ToString(), "Vector3D(4, 5, 6)");
 
 	printf("%sTests completed\u001b[0m. %i of %i passed.\n", passed == total ? "\u001b[32m" : "\u001b[33m", passed, total);
 
