@@ -44,12 +44,21 @@ namespace Utils {
 		std::string TrimmedRight(std::string s);
 		std::string Trimmed(std::string s);
 
+		/// @brief Replaces all occurances of 'what' in 's' with 'with'
+		/// @param s String to replace in
+		/// @param what String to search for
+		/// @param with String to replace with
 		std::string ReplaceAll(std::string s, std::string what, std::string with);
+		/// @brief Splits string into a list of substrings, separated by 'delimiter'
+		/// @param delimiter Separator
+		/// @param s String to split
 		std::list<std::string> Split(std::string s, std::string delimiter);
 
+		// Useless. VS Code labels literally anything as the thing i write the docs for,
+		// except the actual function. Fuck it.
 		template<typename T>
 		std::string Join(std::list<T> items, std::string glue);
 		template<typename T>
-		std::string Cast(T value);
+		std::string Convert(T value);
 	}
 }

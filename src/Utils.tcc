@@ -12,11 +12,10 @@ string Utils::String::Join(list<T> items, string glue) {
             ss << glue;
         i++;
     }
-
     return string(istreambuf_iterator<char>(ss), {});
 }
 template<typename T>
-string Utils::String::Cast(T value) {
+string Utils::String::Convert(T value) {
 	string rs;
 
 	stringstream ss;
