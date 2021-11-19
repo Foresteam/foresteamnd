@@ -39,19 +39,19 @@ string Utils::WrappedInBrackets(int count...) {
 	return string(istreambuf_iterator<char>(ss), {});
 }
 
-string Utils::Text::AlignedLeft(string s, size_t maxLength) {
+string Utils::String::AlignedLeft(string s, size_t maxLength) {
 	s = Trimmed(s);
 	while (s.length() < maxLength)
 		s.insert(s.begin(), ' ');
 	return s;
 }
-string Utils::Text::AlignedRight(string s, size_t maxLength) {
+string Utils::String::AlignedRight(string s, size_t maxLength) {
 	s = Trimmed(s);
 	while (s.length() < maxLength)
 		s.insert(s.rbegin().base(), ' ');
 	return s;
 }
-string Utils::Text::AlignedCenter(string s, size_t maxLength) {
+string Utils::String::AlignedCenter(string s, size_t maxLength) {
 	s = Trimmed(s);
 	while (s.length() < maxLength) {
 		s.insert(s.begin(), ' ');
@@ -62,16 +62,27 @@ string Utils::Text::AlignedCenter(string s, size_t maxLength) {
 	return s;
 }
 
-string Utils::Text::TrimmedLeft(string s) {
+string Utils::String::TrimmedLeft(string s) {
 	int spos = 0;
 	for (int i = 0; i < s.length() && s[i] == ' '; i++, spos++);
 	return s.substr(spos);
 }
-string Utils::Text::TrimmedRight(string s) {
+string Utils::String::TrimmedRight(string s) {
 	int spos = 0;
-	for (int i = s.length() - 1; i >= 0 && s[i] == ' '; i++, spos++);
+	for (int i = s.length() - 1; i >= 0 && s[i] == ' '; i--, spos++);
 	return s.substr(0, s.length() - spos);
 }
-string Utils::Text::Trimmed(string s) {
+string Utils::String::Trimmed(string s) {
 	return TrimmedRight(TrimmedLeft(s));
+}
+
+string Utils::String::ReplacedAll(string s, string what, string with) {
+	size_t pos;
+	do {
+		pos = s.find(what);
+		if (pos >= 0)
+			s = s.replace(pos, what.length(), with);
+	}
+	while (pos >= 0);
+	return s;
 }

@@ -40,6 +40,9 @@ int main(int, char**) {
 	printf("'vectors', rotated once[1], drop\n");
 	Test("'vectors', rotated once[0], peek", vectors.Peek()->ToString(), "Vector3D(4, 5, 6)");
 	Test("'vectors', rotated once[0], pop", vectors.Pop().ToString(), "Vector3D(4, 5, 6)");
+	Test("Trim", '"' + Utils::String::Trimmed("   Hello there! ") + '"', "\"Hello there!\"");
+	Test("Trim", Utils::String::Trimmed("  "), "");
+	Test("Align center", '"' + Utils::String::AlignedCenter(" Seems goood  ", 19) + '"', "\"    Seems goood    \"");
 
 	printf("%sTests completed\u001b[0m. %i of %i passed.\n", passed == total ? "\u001b[32m" : "\u001b[33m", passed, total);
 
