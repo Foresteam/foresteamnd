@@ -1,6 +1,6 @@
 #include "src/Quaternion.h"
 #include "src/Matrix.h"
-#include "src/Utils.h"
+#include "src/Utils.tcc"
 #include "src/Stack.tcc"
 #include <cmath>
 #include <iostream>
@@ -43,6 +43,8 @@ int main(int, char**) {
 	Test("Trim", '"' + Utils::String::Trimmed("   Hello there! ") + '"', "\"Hello there!\"");
 	Test("Trim", Utils::String::Trimmed("  "), "");
 	Test("Align center", '"' + Utils::String::AlignedCenter(" Seems goood  ", 19) + '"', "\"    Seems goood    \"");
+	Test("Split, join", Utils::String::Join(Utils::String::Split("1 2 3", " "), ", "), "1, 2, 3");
+	Test("Cast to string", Utils::String::Cast(1.2345), "1.2345");
 
 	printf("%sTests completed\u001b[0m. %i of %i passed.\n", passed == total ? "\u001b[32m" : "\u001b[33m", passed, total);
 

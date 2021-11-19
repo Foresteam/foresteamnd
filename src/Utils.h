@@ -2,6 +2,7 @@
 #include <random>
 #include <string>
 #include <vector>
+#include <list>
 
 #define sqr(x) x * x
 
@@ -43,9 +44,12 @@ namespace Utils {
 		std::string TrimmedRight(std::string s);
 		std::string Trimmed(std::string s);
 
-		std::string ReplacedAll(std::string s, std::string what, std::string with);
-		
+		std::string ReplaceAll(std::string s, std::string what, std::string with);
+		std::list<std::string> Split(std::string s, std::string delimiter);
+
 		template<typename T>
-		std::string Join(std::vector<T> items, std::string glue);
+		std::string Join(std::list<T> items, std::string glue);
+		template<typename T>
+		std::string Cast(T value);
 	}
 }

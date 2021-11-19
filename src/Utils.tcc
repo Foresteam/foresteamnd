@@ -3,13 +3,25 @@
 using namespace std;
 
 template <typename T>
-string Utils::String::Join(vector<T> items, string glue) {
+string Utils::String::Join(list<T> items, string glue) {
     stringstream ss;
-    for (auto it = items.begin(); it != items.end(); it++) {
-        ss << *it;
-        if (it != items.rbegin().base())
+    int i = 0;
+    for (T item : items) {
+        ss << item;
+        if (i != items.size() - 1)
             ss << glue;
+        i++;
     }
 
     return string(istreambuf_iterator<char>(ss), {});
+}
+template<typename T>
+string Utils::String::Cast(T value) {
+	string rs;
+
+	stringstream ss;
+	ss << value;
+	ss >> rs;
+
+	return rs;
 }

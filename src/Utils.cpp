@@ -76,7 +76,7 @@ string Utils::String::Trimmed(string s) {
 	return TrimmedRight(TrimmedLeft(s));
 }
 
-string Utils::String::ReplacedAll(string s, string what, string with) {
+string Utils::String::ReplaceAll(string s, string what, string with) {
 	size_t pos;
 	do {
 		pos = s.find(what);
@@ -85,4 +85,17 @@ string Utils::String::ReplacedAll(string s, string what, string with) {
 	}
 	while (pos >= 0);
 	return s;
+}
+list<string> Utils::String::Split(string s, string delimiter) {
+	list<string> result = list<string>();
+	size_t pos;
+	while ((pos = s.find(delimiter)) != string::npos) {
+		string found = s.substr(0, pos);
+		if (found.length() > 0)
+			result.push_back(s.substr(0, pos));
+		s = s.substr(pos + 1);
+	}
+	if (s.length() > 0)
+		result.push_back(s);
+	return result;
 }
