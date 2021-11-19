@@ -1,6 +1,7 @@
 #pragma once
 #include <random>
 #include <string>
+#include <vector>
 
 #define sqr(x) x * x
 
@@ -43,5 +44,8 @@ namespace Utils {
 		std::string Trimmed(std::string s);
 
 		std::string ReplacedAll(std::string s, std::string what, std::string with);
+		
+		template<typename T>
+		std::string Join(std::vector<T> items, std::string glue);
 	}
 }

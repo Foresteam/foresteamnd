@@ -17,6 +17,7 @@ set(BUILD_FILES
     src/Vector.cpp
     src/Vector2.cpp
     src/Utils.cpp
+    src/Utils.tcc
     src/Matrix.cpp
     src/Quaternion.cpp
     src/Triangle.cpp
