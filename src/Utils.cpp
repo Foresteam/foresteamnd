@@ -38,3 +38,40 @@ string Utils::WrappedInBrackets(int count...) {
 	va_end(args);
 	return string(istreambuf_iterator<char>(ss), {});
 }
+
+string Utils::Text::AlignedLeft(string s, size_t maxLength) {
+	s = Trimmed(s);
+	while (s.length() < maxLength)
+		s.insert(s.begin(), ' ');
+	return s;
+}
+string Utils::Text::AlignedRight(string s, size_t maxLength) {
+	s = Trimmed(s);
+	while (s.length() < maxLength)
+		s.insert(s.rbegin().base(), ' ');
+	return s;
+}
+string Utils::Text::AlignedCenter(string s, size_t maxLength) {
+	s = Trimmed(s);
+	while (s.length() < maxLength) {
+		s.insert(s.begin(), ' ');
+		s.insert(s.rbegin().base(), ' ');
+	}
+	if (s.length() > maxLength)
+		s.erase(s.rend().base());
+	return s;
+}
+
+string Utils::Text::TrimmedLeft(string s) {
+	int spos = 0;
+	for (int i = 0; i < s.length() && s[i] == ' '; i++, spos++);
+	return s.substr(spos);
+}
+string Utils::Text::TrimmedRight(string s) {
+	int spos = 0;
+	for (int i = s.length() - 1; i >= 0 && s[i] == ' '; i++, spos++);
+	return s.substr(0, s.length() - spos);
+}
+string Utils::Text::Trimmed(string s) {
+	return TrimmedRight(TrimmedLeft(s));
+}
