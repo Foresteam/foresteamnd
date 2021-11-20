@@ -43,6 +43,7 @@ int main(int, char**) {
 	Test("Trim", '"' + Utils::String::Trimmed("   Hello there! ") + '"', "\"Hello there!\"");
 	Test("Trim", Utils::String::Trimmed("  "), "");
 	Test("Align center", '"' + Utils::String::AlignedCenter(" Seems goood  ", 19) + '"', "\"    Seems goood    \"");
+	Test("Align right", '"' + Utils::String::AlignedRight(" Seems goood  ", 19) + '"', "\"        Seems goood\"");
 	Test("Split, join", Utils::String::Join(Utils::String::Split("1 2 3", " "), ", "), "1, 2, 3");
 	Test("Convert to string", Utils::String::Convert(1.2345), "1.2345");
 

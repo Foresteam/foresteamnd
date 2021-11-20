@@ -42,13 +42,13 @@ string Utils::WrappedInBrackets(int count...) {
 string Utils::String::AlignedLeft(string s, size_t maxLength) {
 	s = Trimmed(s);
 	while (s.length() < maxLength)
-		s.insert(s.begin(), ' ');
+		s.insert(s.rbegin().base(), ' ');
 	return s;
 }
 string Utils::String::AlignedRight(string s, size_t maxLength) {
 	s = Trimmed(s);
 	while (s.length() < maxLength)
-		s.insert(s.rbegin().base(), ' ');
+		s.insert(s.begin(), ' ');
 	return s;
 }
 string Utils::String::AlignedCenter(string s, size_t maxLength) {
