@@ -17,14 +17,16 @@
 namespace Utils {
 	/// @param from Random start
 	/// @param to Random end
-	/// @return Random value in range [from, to]
+	/// @returns Random value in range [from, to]
 	float RandRange(float from, float to);
 	/// @param to Random end
-	/// @return Random value in range [0, to]
+	/// @returns Random value in range [0, to]
 	float RandRange(float to);
 	float RoundTo(float val, int k);
 	/// @returns A string like (a, b, c)
 	std::string WrappedInBrackets(int count...);
+	/// @returns Lines
+	std::list<std::string> ReadAllFile(std::string name);
 
 	namespace String {
 		/// @brief Removes all leading spaces
@@ -49,10 +51,11 @@ namespace Utils {
 		/// @param what String to search for
 		/// @param with String to replace with
 		std::string ReplaceAll(std::string s, std::string what, std::string with);
-		/// @brief Splits string into a list of substrings, separated by 'delimiter'
 		/// @param delimiter Separator
 		/// @param s String to split
+		/// @returns List of substrings
 		std::list<std::string> Split(std::string s, std::string delimiter);
+		std::string ToLower(std::string s);
 
 		// Useless. VS Code labels literally anything as the thing i write the docs for,
 		// except the actual function. Fuck it.
