@@ -74,10 +74,10 @@ void Matrix::Print(int roundTo, string* output) {
 			ss << '\n';
 	}
 	t = string(istreambuf_iterator<char>(ss), {});
-	if (!output)
-		cout << t << endl;
-	else
+	if (output)
 		*output = t;
+	else
+		cout << t << endl;
 }
 
 Matrix Matrix::Cropped(int row, int col) {
@@ -95,8 +95,7 @@ Matrix Matrix::Transposed() {
 	Matrix result = Matrix(cols, rows);
 	for (int i = 0; i < rows; i++)
 		for (int j = 0; j < cols; j++)
-			if (j > i)
-				result[i][j] = self[j][i];
+			result[j][i] = self[i][j];
     return result;
 }
 Matrix& Matrix::operator=(const Matrix& other) {
