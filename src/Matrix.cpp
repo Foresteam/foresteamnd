@@ -1,5 +1,7 @@
 #include "Matrix.h"
 #include "Utils.h"
+#include <sstream>
+using namespace std;
 
 void Matrix::Init(int rows, int cols) {
 	this->rows = rows;
@@ -59,14 +61,23 @@ void Matrix::Manipulate(Matrix& m, Matrix& pair, int toChange, float k) {
 	Manipulate(pair, toChange, k);
 }
 
-void Matrix::Print(int roundTo) {
-	printf("\u001b[32m");
+void Matrix::Print(int roundTo, string* output) {
+	stringstream ss;
+	string t;
 	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++)
-			printf("%9g ", Utils::RoundTo(self[i][j], roundTo));
-		printf("\n");
+		for (int j = 0; j < cols; j++) {
+			ss << Utils::RoundTo(self[i][j], roundTo);
+			if (j < cols - 1)
+				ss << ' ';
+		}
+		if (i < rows - 1)
+			ss << '\n';
 	}
-	printf("\u001b[0m");
+	t = string(istreambuf_iterator<char>(ss), {});
+	if (!output)
+		cout << t << endl;
+	else
+		*output = t;
 }
 
 Matrix Matrix::Cropped(int row, int col) {

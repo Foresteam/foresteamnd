@@ -28,9 +28,10 @@ public:
     /// @return Transposed matrix
 	Matrix Transposed();
 
-    /// Prints matrix
-    //// @param roundTo Number of digits after point
-	void Print(int roundTo = 2);
+    /// @brief Prints matrix. If no 'out' was passed, to stdout.
+    /// @param roundTo Number of digits after point
+	/// @param out Pointer to output string. May be null
+	void Print(int roundTo = 2, std::string* output = nullptr);
 
 	/// Adds toBeAdded'th row to addTo'th row of matrix m, multiplied by k
 	static void Manipulate(Matrix& m, int toBeAdded, int addTo, float k);

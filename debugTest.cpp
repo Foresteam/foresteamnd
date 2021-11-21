@@ -46,6 +46,12 @@ int main(int, char**) {
 	Test("Align right", '"' + Utils::String::AlignedRight(" Seems goood  ", 19) + '"', "\"        Seems goood\"");
 	Test("Split, join", Utils::String::Join(Utils::String::Split("1 2 3", " "), ", "), "1, 2, 3");
 	Test("Convert to string", Utils::String::Convert(1.2345), "1.2345");
+	Matrix m = Matrix(3, 1);
+	for (int i = 0; i < 3; i++)
+		m[i][0] = i;
+	string tMatrix;
+	m.Transposed().Print(2, &tMatrix);
+	Test("Matrix transpose", tMatrix, "0 1 2");
 
 	printf("%sTests completed\u001b[0m. %i of %i passed.\n", passed == total ? "\u001b[32m" : "\u001b[33m", passed, total);
 
