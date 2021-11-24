@@ -25,11 +25,12 @@ public:
 	T* At(size_t index);
 	T* operator[](size_t index);
 
+	/// @returns Size of high level
 	size_t SizeHigh();
+	/// @returns Size of low level
 	size_t SizeLow();
 	/// @brief Macro to SizeHigh()
 	size_t Size();
-
 
 	std::string ToString();
 };
