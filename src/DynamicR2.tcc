@@ -30,3 +30,10 @@ TDR2 T* DynamicR2<T>::At(size_t index) {
 TDR2 T* DynamicR2<T>::operator[](size_t index) {
     return At(index);
 }
+
+TDR2 size_t DynamicR2<T>::SizeHigh() {
+    return s2;
+}
+TDR2 size_t DynamicR2<T>::SizeLow() {
+    return s1;
+}

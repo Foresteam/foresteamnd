@@ -6,7 +6,10 @@ class DynamicR2 {
 private:
 	T* _self;
 	T** self;
-	size_t s1, s2;
+	/// @brief Size of low level
+	size_t s1;
+	/// @brief Size of high level
+	size_t s2;
 public:
     /// @param s1 Size of low level
     /// @param s2 Size of high level
@@ -19,4 +22,9 @@ public:
 
 	T* At(size_t index);
 	T* operator[](size_t index);
+
+	size_t SizeHigh();
+	size_t SizeLow();
+	/// @brief Macro to SizeHigh()
+	size_t (*Size)(void) = SizeHigh;
 };
