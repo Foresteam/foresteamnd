@@ -4,12 +4,12 @@
 #include <vector>
 #include <list>
 
-#define sqr(x) x * x
+#define sqr(x) ((x) * (x))
 
 #define DEG2RAD M_PI / 180
-#define dsin(arg)  sin(arg * DEG2RAD)
-#define dcos(arg)  cos(arg * DEG2RAD)
-#define dtan(arg)  tan(arg * DEG2RAD)
+#define dsin(arg)  sin((arg) * DEG2RAD)
+#define dcos(arg)  cos((arg) * DEG2RAD)
+#define dtan(arg)  tan((arg) * DEG2RAD)
 #define dasin(arg) asin(arg) / DEG2RAD
 #define dacos(arg) acos(arg) / DEG2RAD
 #define datan(arg) atan(arg) / DEG2RAD
