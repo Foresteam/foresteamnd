@@ -14,7 +14,7 @@ set(BUILD_FILES
     src/Quaternion.h
     src/Triangle.h
     src/Stack.h
-    src/DynamicR2.h
+    src/Table.h
     
     src/Vector.cpp
     src/Vector2.cpp
@@ -24,7 +24,7 @@ set(BUILD_FILES
     src/Quaternion.cpp
     src/Triangle.cpp
     src/Stack.tcc
-    src/DynamicR2.tcc
+    src/Table.tcc
 )
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
