@@ -24,6 +24,7 @@ public:
 
 	T* At(size_t index);
 	T* operator[](size_t index);
+	T* operator*();
 
 	/// @returns Size of high level
 	size_t SizeHigh();
