@@ -1,4 +1,6 @@
+#pragma once
 #include "Table.h"
+#include "Utils.tcc"
 #include <cstring>
 
 #define TDR2 template<typename T>
@@ -36,4 +38,21 @@ TDR2 size_t Table<T>::SizeHigh() {
 }
 TDR2 size_t Table<T>::SizeLow() {
     return s1;
+}
+TDR2 size_t Table<T>::Size() {
+    return SizeHigh();
+}
+
+TDR2 std::string Table<T>::ToString() {
+    std::string result;
+    for (int i = 0; i < SizeHigh(); i++) {
+        for (int j = 0; j < SizeLow(); j++) {
+            result += Utils::String::Convert(At(i)[j]);
+            if (j != SizeLow() - 1)
+                result += '\t';
+        }
+        if (i != SizeHigh() - 1)
+            result += '\n';
+    }
+    return result;
 }

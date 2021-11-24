@@ -1,4 +1,6 @@
+#pragma once
 #include <cstdlib>
+#include <string>
 
 /// @brief Dynamic array [][]. Better create with 'new'/'malloc'
 template <typename T>
@@ -26,5 +28,8 @@ public:
 	size_t SizeHigh();
 	size_t SizeLow();
 	/// @brief Macro to SizeHigh()
-	size_t (*Size)(void) = SizeHigh;
+	size_t Size();
+
+
+	std::string ToString();
 };

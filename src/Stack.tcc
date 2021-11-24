@@ -1,3 +1,4 @@
+#pragma once
 #include "Stack.h"
 
 TSTACKITEM TSTACKNODEITEM Stack<Item>::Node<ITEM>::Node(ITEM data, Node<ITEM>* next) {
