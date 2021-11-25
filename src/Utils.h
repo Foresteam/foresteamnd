@@ -63,5 +63,7 @@ namespace Utils {
 		std::string Join(T<V> items, std::string glue);
 		template<typename T>
 		std::string Convert(T value);
+		template<typename T>
+		T Convert(std::string value);
 	}
 }

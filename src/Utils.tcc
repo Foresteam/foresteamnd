@@ -51,3 +51,11 @@ string Utils::String::Convert(T value) {
 
 	return rs;
 }
+template<typename T>
+T Utils::String::Convert(string value) {
+    T rs;
+    stringstream ss;
+    ss << value;
+    ss >> rs;
+    return rs;
+}
