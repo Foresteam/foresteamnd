@@ -1,8 +1,6 @@
 #pragma once
 #include <random>
 #include <string>
-#include <vector>
-#include <list>
 
 #define sqr(x) ((x) * (x))
 
@@ -26,7 +24,8 @@ namespace Utils {
 	/// @returns A string like (a, b, c)
 	std::string WrappedInBrackets(int count...);
 	/// @returns Lines
-	std::list<std::string> ReadAllFile(std::string name);
+	template<template<typename> typename T>
+	T<std::string> ReadAllFile(std::string name);
 
 	namespace String {
 		/// @brief Removes all leading spaces
@@ -51,16 +50,17 @@ namespace Utils {
 		/// @param what String to search for
 		/// @param with String to replace with
 		std::string ReplaceAll(std::string s, std::string what, std::string with);
-		/// @param delimiter Separator
-		/// @param s String to split
-		/// @returns List of substrings
-		std::list<std::string> Split(std::string s, std::string delimiter);
 		std::string ToLower(std::string s);
 
+		/// @param delimiter Separator
+		/// @param s String to split
+		/// @returns List(?) of substrings
+		template <template <typename> typename T>
+		T<std::string> Split(std::string s, std::string delimiter);
 		// Useless. VS Code labels literally anything as the thing i write the docs for,
 		// except the actual function. Fuck it.
-		template<typename T>
-		std::string Join(std::list<T> items, std::string glue);
+		template <template <typename> typename T, typename V>
+		std::string Join(T<V> items, std::string glue);
 		template<typename T>
 		std::string Convert(T value);
 	}

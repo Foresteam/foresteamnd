@@ -41,14 +41,6 @@ string Utils::WrappedInBrackets(int count...) {
 	va_end(args);
 	return string(istreambuf_iterator<char>(ss), {});
 }
-list<string> Utils::ReadAllFile(string name) {
-	auto result = list<string>();
-	ifstream input;
-	input.open(name);
-	for (string line = ""; getline(input, line);)
-		result.push_back(line);
-	return result;
-}
 
 string Utils::String::AlignedLeft(string s, size_t maxLength) {
 	s = Trimmed(s);
@@ -96,19 +88,6 @@ string Utils::String::ReplaceAll(string s, string what, string with) {
 	}
 	while (pos >= 0);
 	return s;
-}
-list<string> Utils::String::Split(string s, string delimiter) {
-	list<string> result = list<string>();
-	size_t pos;
-	while ((pos = s.find(delimiter)) != string::npos) {
-		string found = s.substr(0, pos);
-		if (found.length() > 0)
-			result.push_back(s.substr(0, pos));
-		s = s.substr(pos + 1);
-	}
-	if (s.length() > 0)
-		result.push_back(s);
-	return result;
 }
 string Utils::String::ToLower(string s) {
 	transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return tolower(c); });

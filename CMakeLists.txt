@@ -33,9 +33,10 @@ if(CMAKE_BUILD_TYPE MATCHES Debug)
 else()
     add_library(foresteamnd ${BUILD_FILES})
 endif()
+target_compile_features(foresteamnd PRIVATE cxx_std_17)
 
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-add_compile_options(--std=g++20)
+add_compile_options(--std=g++17)
 include(CPack)
