@@ -2,24 +2,24 @@
 #include "Utils.h"
 #include <sstream>
 #include <fstream>
-using namespace std;
+#include <list>
 
 template<template<typename> typename T>
-T<string> Utils::ReadAllFile(string name) {
-	auto result = T<string>();
-	ifstream input;
+T<std::string> Utils::ReadAllFile(std::string name) {
+	auto result = T<std::string>();
+	std::ifstream input;
 	input.open(name);
-	for (string line = ""; getline(input, line);)
+	for (std::string line = ""; getline(input, line);)
 		result.push_back(line);
 	return result;
 }
 
 template <template <typename> typename T>
-T<string> Utils::String::Split(string s, string delimiter) {
-	T<string> result = T<string>();
+T<std::string> Utils::String::Split(std::string s, std::string delimiter) {
+	T<std::string> result = T<std::string>();
 	size_t pos;
-	while ((pos = s.find(delimiter)) != string::npos) {
-		string found = s.substr(0, pos);
+	while ((pos = s.find(delimiter)) != std::string::npos) {
+		std::string found = s.substr(0, pos);
 		if (found.length() > 0)
 			result.push_back(s.substr(0, pos));
 		s = s.substr(pos + 1);
@@ -30,8 +30,8 @@ T<string> Utils::String::Split(string s, string delimiter) {
 }
 
 template <template <typename> typename T, typename V>
-string Utils::String::Join(T<V> items, string glue) {
-    stringstream ss;
+std::string Utils::String::Join(T<V> items, std::string glue) {
+    std::stringstream ss;
     int i = 0;
     for (V item : items) {
         ss << item;
@@ -39,23 +39,46 @@ string Utils::String::Join(T<V> items, string glue) {
             ss << glue;
         i++;
     }
-    return string(istreambuf_iterator<char>(ss), {});
+    return std::string(std::istreambuf_iterator<char>(ss), {});
 }
-template<typename T>
-string Utils::String::Convert(T value) {
-	string rs;
+template <typename T>
+std::string Utils::String::Convert(T value) {
+	std::string rs;
 
-	stringstream ss;
+	std::stringstream ss;
 	ss << value;
 	ss >> rs;
 
 	return rs;
 }
 template<typename T>
-T Utils::String::Convert(string value) {
+T Utils::String::Convert(std::string value) {
     T rs;
-    stringstream ss;
+    std::stringstream ss;
     ss << value;
     ss >> rs;
     return rs;
+}
+
+int Utils::String::Regex::CountMatches(std::string s, std::regex expr) {
+	auto wordsBegin = std::sregex_iterator(s.begin(), s.end(), expr);
+	auto wordsEnd = std::sregex_iterator();
+
+	return std::distance(wordsBegin, wordsEnd);
+}
+template <template <typename> typename T>
+T<std::smatch> Utils::String::Regex::FindAllMatches(std::string s, std::regex expr) {
+	T<std::smatch> result = T<std::smatch>();
+	std::smatch sm;
+	while (std::regex_search(s, sm, expr)) {
+		result.push_back(sm);
+		s = sm.suffix();
+	}
+	return result;
+}
+std::set<std::string> Utils::String::Regex::FindAllMatchesOnce(std::string s, std::regex expr) {
+	std::set<std::string> result = std::set<std::string>();
+	for (auto match : FindAllMatches<std::list>(s, expr))
+		result.emplace(match.str());
+	return result;
 }

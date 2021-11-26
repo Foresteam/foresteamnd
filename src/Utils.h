@@ -1,6 +1,8 @@
 #pragma once
 #include <random>
 #include <string>
+#include <regex>
+#include <set>
 
 #define sqr(x) ((x) * (x))
 
@@ -65,5 +67,17 @@ namespace Utils {
 		std::string Convert(T value);
 		template<typename T>
 		T Convert(std::string value);
+
+		namespace Regex {
+			int CountMatches(std::string s, std::regex expr);
+			/// @brief Finds all matches in regex
+			/// @param T Should have 'push_back' method
+			/// @returns Container of your choice of 'smatch'
+			template <template <typename> typename T>
+			T<std::smatch> FindAllMatches(std::string s, std::regex expr);
+			/// @brief Finds all regex matches as just strings
+			/// @returns A set of them
+			std::set<std::string> FindAllMatchesOnce(std::string s, std::regex expr);
+		}
 	}
 }
