@@ -20,7 +20,7 @@ T<std::string> Utils::String::Split(std::string s, std::string delimiter) {
 	size_t pos;
 	while ((pos = s.find(delimiter)) != std::string::npos) {
 		std::string found = s.substr(0, pos);
-		if (found.length() > 0)
+		// if (found.length() > 0)
 			result.push_back(s.substr(0, pos));
 		s = s.substr(pos + 1);
 	}
