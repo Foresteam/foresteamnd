@@ -7,6 +7,7 @@ Vector::Vector(float x, float y, float z) {
 	this->y = y;
 	this->z = z;
 }
+Vector::Vector(float coords) : Vector(coords, coords, coords) {}
 Vector::Vector(const Vector& other) : Vector(other.x, other.y, other.z) {}
 Vector::Vector() : Vector::Vector(0, 0, 0) {}
 Vector& Vector::operator=(const Vector& other) {
@@ -34,11 +35,12 @@ Vector Vector::operator+(const Vector& other) const {
 Vector Vector::operator-(const Vector& other) const {
 	return Vector(x - other.x, y - other.y, z - other.z);
 }
-void Vector::operator-=(const Vector& other) {
+Vector& Vector::operator-=(const Vector& other) {
 	*this = *this - other;
+	return *this;
 }
-void Vector::operator+=(const Vector& other) {
-	*this = *this + other;
+Vector& Vector::operator+=(const Vector& other) {
+	return *this = *this + other;
 }
 float Vector::operator*(const Vector& other) const {
 	return this->Dot(other);
@@ -48,6 +50,12 @@ Vector Vector::operator/(const float& n) const {
 }
 Vector Vector::operator*(const float& n) const {
 	return Vector(x * n, y * n, z * n);
+}
+Vector& Vector::operator*=(const float& n) {
+	return *this = *this * n;
+}
+Vector& Vector::operator/=(const float& n) {
+	return *this = *this / n;
 }
 bool Vector::operator==(const Vector& other) const {
 	return x == other.x && y == other.y && z == other.z;
@@ -84,4 +92,8 @@ Vector Vector::Angle() const {
 }
 string Vector::ToString() const {
 	return "Vector3D" + Utils::WrappedInBrackets(3, x, y, z);
+}
+
+Vector operator*(const float& n, const Vector& vec) {
+	return vec * n;
 }

@@ -4,6 +4,7 @@
 class Vector2 : public Vector {
 public:
 	Vector2(float x, float y);
+	Vector2(float coords);
 	Vector2(const Vector& other);
 	Vector2();
 

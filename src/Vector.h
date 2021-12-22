@@ -7,6 +7,7 @@ class Vector {
 public:
 	float x, y, z;
 	Vector(float x, float y, float z);
+	Vector(float coords);
 	Vector(const Vector& other);
 	Vector& operator=(const Vector& other);
 	Vector();
@@ -15,11 +16,13 @@ public:
 	bool operator>(const Vector& v) const;
 	Vector operator+(const Vector& other) const;
 	Vector operator-(const Vector& other) const;
-	void operator-=(const Vector& other);
-	void operator+=(const Vector& other);
+	Vector& operator-=(const Vector& other);
+	Vector& operator+=(const Vector& other);
 	float operator*(const Vector& other) const;
 	Vector operator/(const float& n) const;
 	Vector operator*(const float& n) const;
+	Vector& operator*=(const float& n);
+	Vector& operator/=(const float& n);
 	bool operator==(const Vector& other) const;
 
 	/// For rendering.
@@ -47,3 +50,5 @@ public:
 	/// @returns Vector3D(x, y, z)
 	std::string virtual ToString() const;
 };
+
+Vector operator*(const float& n, const Vector& vec);
