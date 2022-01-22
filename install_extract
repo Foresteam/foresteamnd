@@ -1,0 +1,11 @@
+mkdir extracted
+rm -rf extracted/*
+mkdir extracted/include
+mkdir extracted/lib
+cp src/*.h extracted/include
+cp src/*.tcc extracted/include
+cp build/libforesteamnd.a extracted/lib # linux
+cp build/Release/foresteamnd.lib extracted/lib # windows
+cd extracted/include/
+find ./ -maxdepth 1 -name '*.h' | while read file; do ln -r -s "$file" "${file%.*}"; done
+find ./ -maxdepth 1 -name '*.tcc' | while read file; do ln -f -r -s "$file" "${file%.*}"; done
