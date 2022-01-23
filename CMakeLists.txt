@@ -7,6 +7,7 @@ enable_testing()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(BUILD_FILES
+    src/ExePath.h
     src/Vector.h
     src/Vector2.h
     src/Utils.h
@@ -16,6 +17,7 @@ set(BUILD_FILES
     src/Stack.h
     src/Table.h
     
+    src/ExePath.cpp
     src/Vector.cpp
     src/Vector2.cpp
     src/Utils.cpp
