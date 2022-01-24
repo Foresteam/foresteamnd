@@ -93,3 +93,12 @@ string Utils::String::ToLower(string s) {
 	transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return tolower(c); });
 	return s;
 }
+
+string Utils::Net::ParseHostStr(uint32_t host, uint16_t port) {
+	char* hostBytes = reinterpret_cast<char*>(&host);
+	return std::to_string(int(hostBytes[0])) + '.' +
+		   std::to_string(int(hostBytes[1])) + '.' +
+		   std::to_string(int(hostBytes[2])) + '.' +
+		   std::to_string(int(hostBytes[3])) + ':' +
+		   std::to_string(port);
+}

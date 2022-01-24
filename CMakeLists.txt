@@ -16,6 +16,8 @@ set(BUILD_FILES
     src/Triangle.h
     src/Stack.h
     src/Table.h
+    src/TCPClient.h
+    src/TCPServer.h
     
     src/ExePath.cpp
     src/Vector.cpp
@@ -27,6 +29,8 @@ set(BUILD_FILES
     src/Triangle.cpp
     src/Stack.tcc
     src/Table.tcc
+    src/TCPClient.cpp
+    src/TCPServer.cpp
 )
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
@@ -37,6 +41,7 @@ else()
 endif()
 target_compile_features(foresteamnd PRIVATE cxx_std_17)
 
+target_link_libraries(foresteamnd pthread)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

@@ -80,4 +80,7 @@ namespace Utils {
 			std::set<std::string> FindAllMatchesOnce(std::string s, std::regex expr);
 		}
 	}
+	namespace Net {
+		std::string ParseHostStr(uint32_t host, uint16_t port);
+	}
 }
