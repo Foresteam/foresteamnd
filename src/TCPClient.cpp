@@ -12,8 +12,9 @@ char* TCPClient::ReceiveRawData() {
 	// receive the size first
 	while (recv(_socket, reinterpret_cast<char*>(&bufSz), sizeof(size_t), 0) < 0)
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));
-	char* buf = new char[bufSz];
-	memset(buf, 0, bufSz);
+	printf("Receiving %lu bytes...\n", bufSz);
+	char* buf = new char[bufSz + 1];
+	memset(buf, 0, bufSz + 1);
 	// receive data of the actual size
 	while (recv(_socket, buf, bufSz, 0) < 0)
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));

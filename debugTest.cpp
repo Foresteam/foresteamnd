@@ -55,8 +55,9 @@ int main(int, char**) {
 	m.Transposed().Print(2, &tMatrix);
 	Test("Matrix transpose", tMatrix, "0 1 2");
 
-	// TCPClient client = TCPClient("127.0.0.1", 1337);
-	// client.SendData("Welcome to the club, buddy!");
+	TCPClient client = TCPClient("127.0.0.1", 1337);
+	client.SendData("Welcome to the club, buddy!");
+	std::cout << client.ReceiveData() << endl;
 
 	printf("%sTests completed\u001b[0m. %i of %i passed.\n", passed == total ? "\u001b[32m" : "\u001b[33m", passed, total);
 
