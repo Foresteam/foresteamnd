@@ -34,8 +34,13 @@ public:
 	uint32_t GetHost() const;
 	uint16_t GetPort() const;
 
-	bool HasData();
-	std::string GetData();
+	/// @brief Acquires data through net. Keeps waiting, until the data is received. Automatically deletes the dynamic buffer
+	/// @returns Data string
+	std::string ReceiveData();
+	/// @brief Acquires data through net. Keeps waiting, until the data is received
+	/// @returns Dynamic char buffer
+	char* ReceiveRawData();
 
+	bool SendData(const void* data, size_t size) const;
 	bool SendData(std::string data) const;
 };
