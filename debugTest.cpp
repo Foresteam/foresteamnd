@@ -55,7 +55,7 @@ int main(int, char**) {
 	m.Transposed().Print(2, &tMatrix);
 	Test("Matrix transpose", tMatrix, "0 1 2");
 
-	TCPClient client = TCPClient("127.0.0.1", 1337);
+	TCPClient client = TCPClient("127.0.0.1", 1337, true);
 	client.SendData("Welcome to the club, buddy!");
 	std::cout << client.ReceiveData() << endl;
 
