@@ -60,7 +60,7 @@ T Utils::String::Convert(std::string value) {
     return rs;
 }
 
-int Utils::String::Regex::CountMatches(std::string s, std::regex expr) {
+inline int Utils::String::Regex::CountMatches(std::string s, std::regex expr) {
 	auto wordsBegin = std::sregex_iterator(s.begin(), s.end(), expr);
 	auto wordsEnd = std::sregex_iterator();
 
@@ -76,7 +76,7 @@ T<std::smatch> Utils::String::Regex::FindAllMatches(std::string s, std::regex ex
 	}
 	return result;
 }
-std::set<std::string> Utils::String::Regex::FindAllMatchesOnce(std::string s, std::regex expr) {
+inline std::set<std::string> Utils::String::Regex::FindAllMatchesOnce(std::string s, std::regex expr) {
 	std::set<std::string> result = std::set<std::string>();
 	for (auto match : FindAllMatches<std::list>(s, expr))
 		result.emplace(match.str());

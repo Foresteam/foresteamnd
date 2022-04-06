@@ -29,26 +29,17 @@ void TCPClient::LostConnection() {
 char* TCPClient::ReceiveRawData(size_t* sz) {
 	Retry();
 	size_t bufSz;
-	ssize_t code;
 	// receive the size first
-	while ((code = recv(_socket, reinterpret_cast<char*>(&bufSz), sizeof(size_t), 0)) < 1) {
-		if (code < 0) {
-			if (sz) *sz = 0;
-			LostConnection();
-			return nullptr;
-		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	if (recv(_socket, reinterpret_cast<char*>(&bufSz), sizeof(size_t), 0) < 0) {
+		LostConnection();
+		return nullptr;
 	}
 	char* buf = new char[bufSz + 1];
 	memset(buf, 0, bufSz + 1);
 	// receive data of the actual size
-	while ((code = recv(_socket, buf, bufSz, 0)) < 1) {
-		if (code < 0) {
-			if (sz) *sz = 0;
-			LostConnection();
-			return nullptr;
-		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	if (recv(_socket, buf, bufSz, 0) < 0) {
+		LostConnection();
+		return nullptr;
 	}
 	if (sz)
 		*sz = bufSz;
