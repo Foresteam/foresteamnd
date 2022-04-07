@@ -76,7 +76,7 @@ float Vector::Dot(const Vector& other) const {
 	return prod;
 }
 float Vector::Distance(const Vector& other) const {
-	return sqrt(pow(x - other.x, 2) + pow(y - other.y, 2) + pow(z - other.z, 2));
+	return (float)sqrt(pow(x - other.x, 2) + pow(y - other.y, 2) + pow(z - other.z, 2));
 }
 float Vector::Length() const {
 	return Distance(Vector(0, 0, 0));

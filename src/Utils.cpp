@@ -15,9 +15,9 @@ float Utils::RandRange(float to) {
 }
 
 float Utils::RoundTo(float val, int k) {
-	val *= pow(10, k);
+	val *= (float)pow(10, k);
 	val = round(val);
-	val /= pow(10, k);
+	val /= (float)pow(10, k);
 
 	if (fabs(val) == 0)
 		val = 0;
@@ -71,8 +71,8 @@ string Utils::String::TrimmedLeft(string s) {
 	return s.substr(spos);
 }
 string Utils::String::TrimmedRight(string s) {
-	int spos = 0;
-	for (int i = s.length() - 1; i >= 0 && s[i] == ' '; i--, spos++);
+	size_t spos = 0;
+	for (size_t i = s.length() - 1; i >= 0 && s[i] == ' '; i--, spos++);
 	return s.substr(0, s.length() - spos);
 }
 string Utils::String::Trimmed(string s) {
