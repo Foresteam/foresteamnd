@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(foresteamnd VERSION 0.1.0)
+if(NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE Release)
+endif()
 
 include(CTest)
 enable_testing()
