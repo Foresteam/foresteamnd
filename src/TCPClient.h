@@ -5,6 +5,7 @@
 #ifdef _WIN32 // Windows NT
 #include <WinSock2.h>
 #define PLATFORM_SOCKET SOCKET
+#define PLATFORM_ADDRESS struct addrinfo
 #else // *nix
 #define PLATFORM_SOCKET int
 #define PLATFORM_ADDRESS struct sockaddr_in
