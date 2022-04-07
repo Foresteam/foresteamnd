@@ -1,3 +1,4 @@
+#!/bin/bash
 mkdir extracted
 rm -rf extracted/*
 mkdir extracted/include
@@ -6,18 +7,15 @@ mkdir extracted/lib
 cp src/*.h extracted/include/foresteamnd
 cp src/*.tcc extracted/include/foresteamnd
 
-read -p "Are you using Шindows? " -n 1 -r
+read -p "Are you using Шindows (y/n)? " -n 1 -r
 echo    
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     # windows
     cp build/Release/foresteamnd.lib extracted/lib
-    cd extracted/include/foresteamnd/
-    find ./ -maxdepth 1 -name '*.h' | while read file; do cp -f "$file" "${file%.*}"; done
-    find ./ -maxdepth 1 -name '*.tcc' | while read file; do cp -f "$file" "${file%.*}"; done
 else
     # linux
     cp build/libforesteamnd.a extracted/lib
-    cd extracted/include/foresteamnd/
-    find ./ -maxdepth 1 -name '*.h' | while read file; do ln -r -s "$file" "${file%.*}"; done
-    find ./ -maxdepth 1 -name '*.tcc' | while read file; do ln -f -r -s "$file" "${file%.*}"; done
 fi
+cd extracted/include/foresteamnd/
+find ./ -maxdepth 1 -name '*.h' | while read file; do ln -r -s "$file" "${file%.*}"; done
+find ./ -maxdepth 1 -name '*.tcc' | while read file; do ln -f -r -s "$file" "${file%.*}"; done
