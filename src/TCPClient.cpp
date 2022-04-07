@@ -76,7 +76,7 @@ bool TCPClient::SendData(const char* data, size_t size) {
 bool TCPClient::SendData(std::string data) {
 	return SendData(data.c_str(), data.length());
 }
-TCPClient::TCPClient(int socket, struct sockaddr_in address) : _socket(socket), address(address) {}
+TCPClient::TCPClient(PLATFORM_SOCKET socket, struct sockaddr_in address) : _socket(socket), address(address) {}
 TCPClient::TCPClient(const TCPClient& other) : TCPClient(other._host, other._port, other.debug) {}
 TCPClient::TCPClient(std::string host, uint16_t port, bool debug) {
 	this->debug = debug;

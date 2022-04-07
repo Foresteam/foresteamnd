@@ -27,12 +27,13 @@ private:
 	void LostConnection();
 	std::string _host;
 	uint16_t _port;
-	int _socket;
+	PLATFORM_SOCKET _socket;
 	struct sockaddr_in address;
 public:
 	static std::string ResolveIP(std::string host);
 
-	TCPClient(int socket, struct sockaddr_in address);
+	/// @deprecated used by the useless TCPServer (C++ seems to not be the best in this)
+	TCPClient(PLATFORM_SOCKET socket, struct sockaddr_in address);
 	TCPClient(std::string host, uint16_t port, bool debug = false);
 	TCPClient(const TCPClient& other);
 	~TCPClient();
