@@ -5,15 +5,22 @@
 #include <iostream>
 using namespace std;
 
-#ifndef _WIN32
-	#include <arpa/inet.h>
+#ifdef _WIN32
+#pragma comment(lib, "Ws2_32.lib")
+#pragma comment(lib, "Mswsock.lib")
+#pragma comment(lib, "AdvApi32.lib")
+#else
+#include <arpa/inet.h>
 #endif
 
-void TCPClient::Retry() {
+void TCPClient::Retry(bool dInitial) {
 	if (_socket)
 		return;
 	if (debug)
-		printf("Retrying...\n");
+		if (dInitial)
+			printf("Connecting...\n");
+		else
+			printf("Retrying...\n");
 	_socket = socket(AF_INET, SOCK_STREAM, 0);
 	address.sin_family = AF_INET;
 	address.sin_port = htons(_port);
@@ -53,7 +60,6 @@ std::string TCPClient::ReceiveData() {
 	delete[] buf;
 	return rs;
 }
-//Отправляет данные клиенту
 bool TCPClient::SendData(const char* data, size_t size) {
 	Retry();
 	size_t offset = 0, sent;
@@ -70,39 +76,19 @@ bool TCPClient::SendData(std::string data) {
 	return SendData(data.c_str(), data.length());
 }
 
-#ifdef _WIN32
-	// Конструктор клиента по сокету и адресу
-	TCPClient::TCPClient(SOCKET socket, SOCKADDR_IN address) : socket(socket), address(address) {}
-	// Конструктор копирования
-	TCPClient::TCPClient(const TCPClient& other) : socket(other.socket), address(other.address) {}
+TCPClient::TCPClient(const TCPClient& other) : TCPClient(other._host, other._port, other.debug) {}
+TCPClient::TCPClient(std::string host, uint16_t port, bool debug) {
+	this->debug = debug;
+	_socket = 0;
+	_host = host;
+	_port = port;
+	Retry(true);
+}
 
-	TCPClient::~Client() {
-		shutdown(socket, 0); //Обрыв соединения сокета
-		closesocket(socket); //Закрытие сокета
-	}
+TCPClient::~TCPClient() {
+	shutdown(_socket, 0); //Обрыв соединения сокета
+	close(_socket);		 //Закрытие сокета
+}
 
-	// Геттеры хоста и порта
-	uint32_t TCPClient::GetHost() const { return address.sin_addr.S_un.S_addr; }
-	uint16_t TCPClient::GetPort() const { return address.sin_port; }
-#else // *nix
-	// Конструктор клиента по сокету и адресу
-	TCPClient::TCPClient(int socket, struct sockaddr_in address) : _socket(socket), address(address) {}
-	// Конструктор копирования
-	TCPClient::TCPClient(const TCPClient& other) : _socket(other._socket), address(other.address) {}
-	TCPClient::TCPClient(std::string host, uint16_t port, bool debug) {
-		this->debug = debug;
-		_socket = 0;
-		_host = host;
-		_port = port;
-		Retry();
-	}
-
-	TCPClient::~TCPClient() {
-		shutdown(_socket, 0); //Обрыв соединения сокета
-		close(_socket);		 //Закрытие сокета
-	}
-
-	// Геттеры хоста и порта
-	uint32_t TCPClient::GetHost() const { return address.sin_addr.s_addr; }
-	uint16_t TCPClient::GetPort() const { return address.sin_port; }
-#endif
+std::string TCPClient::GetHost() const { return _host; }
+uint16_t TCPClient::GetPort() const { return _port; }
