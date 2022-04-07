@@ -72,7 +72,7 @@ string Utils::String::TrimmedLeft(string s) {
 }
 string Utils::String::TrimmedRight(string s) {
 	size_t spos = 0;
-	for (size_t i = s.length() - 1; i >= 0 && s[i] == ' '; i--, spos++);
+	for (size_t i = s.length(); i > 0 && s[i - 1] == ' '; i--, spos++);
 	return s.substr(0, s.length() - spos);
 }
 string Utils::String::Trimmed(string s) {

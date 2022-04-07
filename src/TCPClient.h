@@ -30,6 +30,8 @@ private:
 	int _socket;
 	struct sockaddr_in address;
 public:
+	static std::string ResolveIP(std::string host);
+
 	TCPClient(int socket, struct sockaddr_in address);
 	TCPClient(std::string host, uint16_t port, bool debug = false);
 	TCPClient(const TCPClient& other);

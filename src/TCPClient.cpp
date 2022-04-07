@@ -10,6 +10,7 @@ using namespace std;
 #pragma comment(lib, "Mswsock.lib")
 #pragma comment(lib, "AdvApi32.lib")
 #else
+#include <netdb.h>
 #include <arpa/inet.h>
 #endif
 
@@ -75,7 +76,7 @@ bool TCPClient::SendData(const char* data, size_t size) {
 bool TCPClient::SendData(std::string data) {
 	return SendData(data.c_str(), data.length());
 }
-
+TCPClient::TCPClient(int socket, struct sockaddr_in address) : _socket(socket), address(address) {}
 TCPClient::TCPClient(const TCPClient& other) : TCPClient(other._host, other._port, other.debug) {}
 TCPClient::TCPClient(std::string host, uint16_t port, bool debug) {
 	this->debug = debug;
@@ -86,9 +87,47 @@ TCPClient::TCPClient(std::string host, uint16_t port, bool debug) {
 }
 
 TCPClient::~TCPClient() {
-	shutdown(_socket, 0); //Обрыв соединения сокета
-	close(_socket);		 //Закрытие сокета
+	shutdown(_socket, 0);
+	close(_socket);
 }
 
 std::string TCPClient::GetHost() const { return _host; }
 uint16_t TCPClient::GetPort() const { return _port; }
+
+void initialize() {
+#ifdef _WIN32
+	WSADATA data;
+	if (WSAStartup(MAKEWORD(1, 1), &data) != 0) {
+		fputs("Could not initialise Winsock.\n", stderr);
+		exit(1);
+	}
+#endif
+}
+
+void uninitialize() {
+#ifdef _WIN32
+	WSACleanup();
+#endif
+}
+std::string TCPClient::ResolveIP(std::string host) {
+	initialize();
+	struct hostent* he = gethostbyname(host.c_str());
+	if (he == NULL)
+		switch (h_errno) {
+		case HOST_NOT_FOUND:
+			fputs("The host was not found.\n", stderr);
+			return "";
+		case NO_ADDRESS:
+			fputs("The name is valid but it has no address.\n", stderr);
+			return "";
+		case NO_RECOVERY:
+			fputs("A non-recoverable name server error occurred.\n", stderr);
+			return "";
+		case TRY_AGAIN:
+			fputs("The name server is temporarily unavailable.", stderr);
+			return "";
+		}
+	std::string result = inet_ntoa(*((struct in_addr*)he->h_addr_list[0]));
+	uninitialize();
+	return result;
+}
