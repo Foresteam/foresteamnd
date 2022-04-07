@@ -22,13 +22,36 @@ void WSInit() {
 		exit(1);
 	}
 }
-namespace platform {
+namespace PLATFORM {
 	void CloseConnection(PLATFORM_SOCKET& socket) {
+		WSACleanup();
 		if (socket == INVALID_SOCKET)
 			return;
+		shutdown(socket, 0);
 		closesocket(socket);
-		WSACleanup();
 		socket = INVALID_SOCKET;
+	}
+	void OpenConnection(PLATFORM_SOCKET& _socket, PLATFORM_ADDRESS& hints, std::string ip, uint16_t port) {
+		WSInit();
+		int iResult;
+		PLATFORM_ADDRESS* addrinfo = nullptr;
+		ZeroMemory(&hints, sizeof(hints));
+		hints.ai_family = AF_INET;
+		hints.ai_socktype = SOCK_STREAM;
+		hints.ai_protocol = IPPROTO_TCP;
+		
+		if (iResult = getaddrinfo(argv[1], DEFAULT_PORT, &hints, &addrinfo)) {
+			CloseConnection(_socket);
+			return;
+		}
+		_socket = socket(addrinfo->ai_family, addrinfo->ai_socktype, addrinfo->ai_protocol);
+		if (_socket == INVALID_SOCKET) {
+			CloseConnection(_socket);
+			return;
+		}
+		if ((iResult = connect(ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen)) == SOCKET_ERROR)
+			CloseConnection(_socket);
+		freeaddrinfo(addrinfo);
 	}
 	int Receive(PLATFORM_SOCKET socket, void* buf, size_t buf_sz, int flags);
 	int Send(PLATFORM_SOCKET socket, void* buf, size_t buf_sz, int flags);
@@ -78,14 +101,14 @@ char* TCPClient::ReceiveRawData(size_t* sz) {
 	Retry();
 	size_t bufSz;
 	// receive the size first
-	if (PLATFORM::Recv(_socket, reinterpret_cast<char*>(&bufSz), sizeof(size_t), 0) < 0) {
+	if (PLATFORM::Recv(_socket, reinterpret_cast<char*>(&bufSz), sizeof(size_t), 0) == SOCKET_ERROR) {
 		LostConnection();
 		return nullptr;
 	}
 	char* buf = new char[bufSz + 1];
 	memset(buf, 0, bufSz + 1);
 	// receive data of the actual size
-	if (PLATFORM::Recv(_socket, buf, bufSz, 0) < 0) {
+	if (PLATFORM::Recv(_socket, buf, bufSz, 0) == SOCKET_ERROR) {
 		LostConnection();
 		return nullptr;
 	}
@@ -105,7 +128,7 @@ bool TCPClient::SendData(const char* data, size_t size) {
 	Retry();
 	size_t offset = 0, sent;
 	while (offset < size)
-		if ((sent = PLATFORM::Send(_socket, const_cast<char*>(data + offset), size - offset, MSG_NOSIGNAL)) == (size_t)-1) {
+		if ((sent = PLATFORM::Send(_socket, const_cast<char*>(data + offset), size - offset, MSG_NOSIGNAL)) == (size_t)SOCKET_ERROR) {
 			LostConnection();
 			return false;
 		}
