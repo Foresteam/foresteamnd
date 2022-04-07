@@ -64,7 +64,7 @@ namespace PLATFORM {
 		socket = INVALID_SOCKET;
 	}
 	void OpenConnection(PLATFORM_SOCKET& _socket, PLATFORM_ADDRESS& address, std::string ip, uint16_t port) {
-		_socket = socket(AF_INET, SOCK_STREAM, 0);
+		_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 		address.sin_family = AF_INET;
 		address.sin_port = htons(port);
 		inet_pton(AF_INET, ip.c_str(), &address.sin_addr);
