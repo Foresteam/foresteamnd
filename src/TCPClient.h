@@ -7,12 +7,16 @@
 #define PLATFORM_SOCKET SOCKET
 #else // *nix
 #define PLATFORM_SOCKET int
+#define PLATFORM_ADDRESS struct sockaddr_in
 #include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
+#endif
+#ifndef INVALID_SOCKET
+#define INVALID_SOCKET -1
 #endif
 
 /// @brief An automatically reconnecting TCP client
@@ -28,12 +32,12 @@ private:
 	std::string _host;
 	uint16_t _port;
 	PLATFORM_SOCKET _socket;
-	struct sockaddr_in address;
+	PLATFORM_ADDRESS _address;
 public:
 	static std::string ResolveIP(std::string host);
 
 	/// @deprecated used by the useless TCPServer (C++ seems to not be the best in this)
-	TCPClient(PLATFORM_SOCKET socket, struct sockaddr_in address);
+	TCPClient(PLATFORM_SOCKET socket, PLATFORM_ADDRESS address);
 	TCPClient(std::string host, uint16_t port, bool debug = false);
 	TCPClient(const TCPClient& other);
 	~TCPClient();
