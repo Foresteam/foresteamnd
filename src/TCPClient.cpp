@@ -14,6 +14,13 @@ using namespace std;
 #include <arpa/inet.h>
 #endif
 
+#ifndef INVALID_SOCKET
+#define INVALID_SOCKET -1
+#endif
+#ifndef SOCKET_ERROR
+#define SOCKET_ERROR -1
+#endif
+
 #ifdef _WIN32
 void WSInit() {
 	WSADATA data;

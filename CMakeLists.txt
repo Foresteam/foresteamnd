@@ -17,7 +17,7 @@ set(BUILD_FILES
     src/Stack.h
     src/Table.h
     src/TCPClient.h
-    src/TCPServer.h
+    # src/TCPServer.h
     
     src/ExePath.cpp
     src/Vector.cpp
@@ -30,7 +30,7 @@ set(BUILD_FILES
     src/Stack.tcc
     src/Table.tcc
     src/TCPClient.cpp
-    src/TCPServer.cpp
+    # src/TCPServer.cpp
 )
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)

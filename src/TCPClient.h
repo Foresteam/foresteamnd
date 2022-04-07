@@ -15,12 +15,6 @@
 #include <sys/types.h>
 #include <unistd.h>
 #endif
-#ifndef INVALID_SOCKET
-#define INVALID_SOCKET -1
-#endif
-#ifndef SOCKET_ERROR
-#define SOCKET_ERROR -1
-#endif
 
 /// @brief An automatically reconnecting TCP client
 class TCPClient {
