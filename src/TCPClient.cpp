@@ -3,9 +3,11 @@
 #include <chrono>
 #include <thread>
 #include <iostream>
+#include "Utils.h"
 using namespace std;
 
 #ifdef _WIN32
+#include <ws2tcpip.h>
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "Mswsock.lib")
 #pragma comment(lib, "AdvApi32.lib")
@@ -19,6 +21,9 @@ using namespace std;
 #endif
 #ifndef SOCKET_ERROR
 #define SOCKET_ERROR -1
+#endif
+#ifndef MSG_NOSIGNAL
+#define MSG_NOSIGNAL 0
 #endif
 
 #ifdef _WIN32
@@ -47,7 +52,7 @@ namespace PLATFORM {
 		hints.ai_socktype = SOCK_STREAM;
 		hints.ai_protocol = IPPROTO_TCP;
 		
-		if (iResult = getaddrinfo(argv[1], DEFAULT_PORT, &hints, &addrinfo)) {
+		if (iResult = getaddrinfo(ip.c_str(), Utils::String::Convert(port).c_str(), &hints, &addrinfo)) {
 			CloseConnection(_socket);
 			return;
 		}
@@ -56,12 +61,16 @@ namespace PLATFORM {
 			CloseConnection(_socket);
 			return;
 		}
-		if ((iResult = connect(ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen)) == SOCKET_ERROR)
+		if ((iResult = connect(_socket, addrinfo->ai_addr, (int)addrinfo->ai_addrlen)) == SOCKET_ERROR)
 			CloseConnection(_socket);
 		freeaddrinfo(addrinfo);
 	}
-	int Receive(PLATFORM_SOCKET socket, void* buf, size_t buf_sz, int flags);
-	int Send(PLATFORM_SOCKET socket, void* buf, size_t buf_sz, int flags);
+	size_t Recv(PLATFORM_SOCKET socket, char* buf, int buf_sz, int flags) {
+		return recv(socket, buf, buf_sz, flags);
+	}
+	int __stdcall Send(PLATFORM_SOCKET socket, char* buf, int buf_sz, int flags) {
+		return send(socket, buf, buf_sz, flags);
+	}
 }
 #else
 namespace PLATFORM {
@@ -77,16 +86,14 @@ namespace PLATFORM {
 		inet_pton(AF_INET, ip.c_str(), &address.sin_addr);
 		connect(_socket, (struct sockaddr*)&address, sizeof(address));
 	}
-	int Recv(PLATFORM_SOCKET socket, void* buf, size_t buf_sz, int flags);
-	int Send(PLATFORM_SOCKET socket, void* buf, size_t buf_sz, int flags);
+	ssize_t Recv(PLATFORM_SOCKET socket, void* buf, size_t buf_sz, int flags) {
+		return recv(socket, buf, buf_sz, flags);
+	}
+	ssize_t Send(PLATFORM_SOCKET socket, void* buf, size_t buf_sz, int flags) {
+		return send(socket, buf, buf_sz, flags);
+	}
 }
 #endif
-int PLATFORM::Recv(PLATFORM_SOCKET socket, void* buf, size_t buf_sz, int flags) {
-	return recv(socket, buf, buf_sz, flags);
-}
-int PLATFORM::Send(PLATFORM_SOCKET socket, void* buf, size_t buf_sz, int flags) {
-	return send(socket, buf, buf_sz, flags);
-}
 
 void TCPClient::Retry(bool dInitial) {
 	if (_socket != INVALID_SOCKET)
