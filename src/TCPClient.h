@@ -3,7 +3,9 @@
 #include <string>
 
 #ifdef _WIN32 // Windows NT
+#include <ws2tcpip.h>
 #include <WinSock2.h>
+// #define _WIN32_WINNT 0x501
 #define PLATFORM_SOCKET SOCKET
 #define PLATFORM_ADDRESS struct addrinfo
 #else // *nix
