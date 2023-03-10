@@ -13,7 +13,7 @@ cmake --build . --config Release -j{NUMBER_OF_THREADS}
 ```bash
 cmake --build . --target ALL_BUILD --config Release
 ```
-## Install (system-wide, use bash shell)
+## Install. System-wide, Linux only
 ```bash
 chmod +x install
 sudo ./install
