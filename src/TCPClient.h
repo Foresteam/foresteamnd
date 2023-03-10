@@ -3,7 +3,9 @@
 #include <string>
 
 #ifdef _WIN32 // Windows NT
+#include <ws2tcpip.h>
 #include <WinSock2.h>
+// #define _WIN32_WINNT 0x501
 #define PLATFORM_SOCKET SOCKET
 #define PLATFORM_ADDRESS struct addrinfo
 #else // *nix
@@ -36,6 +38,7 @@ public:
 
 	/// @deprecated used by the useless TCPServer (C++ seems to not be the best in this)
 	TCPClient(PLATFORM_SOCKET socket, PLATFORM_ADDRESS address);
+	/// @param host Either domain or IP
 	TCPClient(std::string host, uint16_t port, bool debug = false);
 	TCPClient(const TCPClient& other);
 	~TCPClient();

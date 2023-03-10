@@ -44,7 +44,7 @@ set(BUILD_FILES
 )
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
-    list(APPEND BUILD_FILES debugTest.cpp)
+    list(APPEND BUILD_FILES main.cpp)
     add_executable(foresteamnd ${BUILD_FILES})
 else()
     add_library(foresteamnd ${BUILD_FILES})

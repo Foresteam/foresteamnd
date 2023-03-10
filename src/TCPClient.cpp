@@ -104,7 +104,7 @@ void TCPClient::Retry(bool dInitial) {
 		else
 			printf("Retrying...\n");
 	PLATFORM::OpenConnection(_socket, _address, ResolveIP(_host), _port);
-	
+	std::cout << _socket << std::endl;
 }
 void TCPClient::LostConnection() {
 	PLATFORM::CloseConnection(_socket);
@@ -112,7 +112,7 @@ void TCPClient::LostConnection() {
 		printf("Connection lost\n");
 }
 char* TCPClient::ReceiveRawData(size_t* sz) {
-	Retry();
+	Retry(false);
 	size_t bufSz;
 	// receive the size first
 	if (PLATFORM::Recv(_socket, reinterpret_cast<char*>(&bufSz), sizeof(size_t), 0) == SOCKET_ERROR) {
@@ -139,7 +139,7 @@ std::string TCPClient::ReceiveData() {
 	return rs;
 }
 bool TCPClient::SendData(const char* data, size_t size) {
-	Retry();
+	Retry(false);
 	size_t offset = 0, sent;
 	while (offset < size)
 		if ((sent = PLATFORM::Send(_socket, const_cast<char*>(data + offset), size - offset, MSG_NOSIGNAL)) == (size_t)SOCKET_ERROR) {
