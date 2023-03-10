@@ -7,7 +7,7 @@ cmake ..
 ```
 ## Build (Linux)
 ```bash
-cmake --build . --config Release
+cmake --build . --config Release -j{NUMBER_OF_THREADS}
 ```
 ## Build (Windows)
 ```bash
