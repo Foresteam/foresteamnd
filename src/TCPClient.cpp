@@ -131,10 +131,11 @@ char* TCPClient::ReceiveRawData(size_t* sz) {
 	return buf;
 }
 std::string TCPClient::ReceiveData() {
-	char* buf = ReceiveRawData();
+	size_t sz;
+	char* buf = ReceiveRawData(&sz);
 	if (!buf)
 		return "";
-	std::string rs = buf;
+	std::string rs = std::string(buf, sz);
 	delete[] buf;
 	return rs;
 }
