@@ -31,7 +31,7 @@
 
 namespace ExePath {
 
-#if defined(_WIN32)
+#ifdef WIN32
 
 	std::string getExecutablePath() {
 		char rawPathName[MAX_PATH];

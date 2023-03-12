@@ -3,6 +3,7 @@
 #include <string>
 #include <regex>
 #include <set>
+#define _USE_MATH_DEFINES
 
 #define sqr(x) ((x) * (x))
 

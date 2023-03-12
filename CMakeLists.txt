@@ -1,8 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(foresteamnd VERSION 0.1.0)
-if(NOT CMAKE_BUILD_TYPE)
-	set(CMAKE_BUILD_TYPE Release)
-endif()
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 	message(STATUS "Setting build type to 'Release' as none was specified.")
@@ -51,9 +48,16 @@ else()
 endif()
 target_compile_features(foresteamnd PRIVATE cxx_std_17)
 
-target_link_libraries(foresteamnd pthread)
+
+if (UNIX AND NOT APPLE)
+    set(PLATFORM_LIBS pthread)
+    add_compile_options(--std=g++17)
+elseif (WIN32)
+    set(PLATFORM_LIBS shlwapi)
+endif()
+
+target_link_libraries(foresteamnd ${PLATFORM_LIBS})
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-add_compile_options(--std=g++17)
 include(CPack)

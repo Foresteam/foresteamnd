@@ -3,7 +3,7 @@
 #include <chrono>
 #include <thread>
 #include <iostream>
-#include "Utils.h"
+#include "Utils.tcc"
 using namespace std;
 
 #ifdef _WIN32
