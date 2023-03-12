@@ -45,7 +45,7 @@ public:
 	std::string GetHost() const;
 	uint16_t GetPort() const;
 
-	/// @brief Acquires data through net. Keeps waiting, until the data is received. Automatically deletes the dynamic buffer
+	/// @brief Acquires data through net. Keeps waiting, until the data is received. Automatically deletes the dynamic buffer. Interprets 1-length data with 0 as empty
 	/// @returns Data string
 	std::string ReceiveData();
 	/// @brief Acquires data through net. Keeps waiting, until the data is received

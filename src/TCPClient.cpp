@@ -95,6 +95,7 @@ namespace PLATFORM {
 }
 #endif
 
+
 void TCPClient::Retry(bool dInitial) {
 	if (_socket != INVALID_SOCKET)
 		return;
@@ -104,7 +105,6 @@ void TCPClient::Retry(bool dInitial) {
 		else
 			printf("Retrying...\n");
 	PLATFORM::OpenConnection(_socket, _address, ResolveIP(_host), _port);
-	std::cout << _socket << std::endl;
 }
 void TCPClient::LostConnection() {
 	PLATFORM::CloseConnection(_socket);
@@ -131,10 +131,11 @@ char* TCPClient::ReceiveRawData(size_t* sz) {
 	return buf;
 }
 std::string TCPClient::ReceiveData() {
-	char* buf = ReceiveRawData();
+	size_t sz;
+	char* buf = ReceiveRawData(&sz);
 	if (!buf)
 		return "";
-	std::string rs = buf;
+	std::string rs = (sz == 1 && *buf == 0) ? "" : std::string(buf, sz);
 	delete[] buf;
 	return rs;
 }
