@@ -1,6 +1,6 @@
 #include "src/Quaternion.h"
 #include "src/Matrix.h"
-#include "src/Utils.tcc"
+#include "src/Utils.h"
 #include "src/Stack.tcc"
 #include "src/TCPClient.h"
 #include <math.h>
@@ -46,7 +46,7 @@ int main(int, char**) {
 	Test("Trim", Utils::String::Trimmed("  "), "");
 	Test("Align center", '"' + Utils::String::AlignedCenter(" Seems goood  ", 19) + '"', "\"    Seems goood    \"");
 	Test("Align right", '"' + Utils::String::AlignedRight(" Seems goood  ", 19) + '"', "\"        Seems goood\"");
-	Test("Split, join", Utils::String::Join<list, string>(Utils::String::Split<list>("1 2 3", " "), ", "), "1, 2, 3");
+	Test("Split, join", Utils::String::Join<string>(Utils::String::Split("1 2 3", " "), ", "), "1, 2, 3");
 	Test("Convert to string", Utils::String::Convert(1.2345), "1.2345");
 	Matrix m = Matrix(3, 1);
 	for (int i = 0; i < 3; i++)

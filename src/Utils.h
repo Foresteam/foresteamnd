@@ -2,6 +2,7 @@
 #include <random>
 #include <string>
 #include <regex>
+#include <list>
 #include <set>
 #define _USE_MATH_DEFINES
 
@@ -27,8 +28,7 @@ namespace Utils {
 	/// @returns A string like (a, b, c)
 	std::string WrappedInBrackets(int count...);
 	/// @returns Lines
-	template<template<typename> typename T>
-	T<std::string> ReadAllFile(std::string name);
+	std::list<std::string> ReadAllFile(std::string name);
 
 	namespace String {
 		/// @brief Removes all leading spaces
@@ -58,12 +58,11 @@ namespace Utils {
 		/// @param delimiter Separator
 		/// @param s String to split
 		/// @returns List(?) of substrings
-		template <template <typename> typename T>
-		T<std::string> Split(std::string s, std::string delimiter);
+		std::list<std::string> Split(std::string s, std::string delimiter);
 		// Useless. VS Code labels literally anything as the thing i write the docs for,
 		// except the actual function. Fuck it.
-		template <template <typename> typename T, typename V>
-		std::string Join(T<V> items, std::string glue);
+		template <typename V>
+		std::string Join(std::list<V> items, std::string glue);
 		template<typename T>
 		std::string Convert(T value);
 		template<typename T>
@@ -74,8 +73,7 @@ namespace Utils {
 			/// @brief Finds all matches in regex
 			/// @param T Should have 'push_back' method
 			/// @returns Container of your choice of 'smatch'
-			template <template <typename> typename T>
-			T<std::smatch> FindAllMatches(std::string s, std::regex expr);
+			std::list<std::smatch> FindAllMatches(std::string s, std::regex expr);
 			/// @brief Finds all regex matches as just strings
 			/// @returns A set of them
 			std::set<std::string> FindAllMatchesOnce(std::string s, std::regex expr);

@@ -1,6 +1,6 @@
 #pragma once
 #include "Table.h"
-#include "Utils.tcc"
+#include "Utils.h"
 #include <cstring>
 
 #define TTABLE template<typename T>

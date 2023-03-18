@@ -3,7 +3,7 @@
 #include <chrono>
 #include <thread>
 #include <iostream>
-#include "Utils.tcc"
+#include "Utils.h"
 using namespace std;
 
 #ifdef _WIN32
@@ -99,11 +99,12 @@ namespace PLATFORM {
 void TCPClient::Retry(bool dInitial) {
 	if (_socket != INVALID_SOCKET)
 		return;
-	if (debug)
+	if (debug) {
 		if (dInitial)
 			printf("Connecting...\n");
 		else
 			printf("Retrying...\n");
+	}
 	PLATFORM::OpenConnection(_socket, _address, ResolveIP(_host), _port);
 }
 void TCPClient::LostConnection() {

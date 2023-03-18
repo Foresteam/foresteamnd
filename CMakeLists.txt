@@ -30,12 +30,11 @@ set(BUILD_FILES
     src/Vector.cpp
     src/Vector2.cpp
     src/Utils.cpp
-    src/Utils.tcc
     src/Matrix.cpp
     src/Quaternion.cpp
     src/Triangle.cpp
-    src/Stack.tcc
-    src/Table.tcc
+    # src/Stack.tcc
+    # src/Table.tcc
     src/TCPClient.cpp
     # src/TCPServer.cpp
 )
