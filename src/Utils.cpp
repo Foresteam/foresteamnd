@@ -141,6 +141,8 @@ std::string Utils::String::Join(std::list<V> items, std::string glue) {
 }
 template std::string Utils::String::Join<std::string>(std::list<std::string>, std::string);
 template std::string Utils::String::Join<int>(std::list<int>, std::string);
+template std::string Utils::String::Join<long int>(std::list<long int>, std::string);
+template std::string Utils::String::Join<size_t>(std::list<size_t>, std::string);
 template std::string Utils::String::Join<float>(std::list<float>, std::string);
 template std::string Utils::String::Join<double>(std::list<double>, std::string);
 
@@ -155,6 +157,8 @@ std::string Utils::String::Convert(T value) {
 	return rs;
 }
 template std::string Utils::String::Convert<int>(int);
+template std::string Utils::String::Convert<long int>(long int);
+template std::string Utils::String::Convert<size_t>(size_t);
 template std::string Utils::String::Convert<float>(float);
 template std::string Utils::String::Convert<double>(double);
 
@@ -167,6 +171,8 @@ T Utils::String::Convert(std::string value) {
     return rs;
 }
 template int Utils::String::Convert<int>(std::string);
+template long int Utils::String::Convert<long int>(std::string);
+template size_t Utils::String::Convert<size_t>(std::string);
 template float Utils::String::Convert<float>(std::string);
 template double Utils::String::Convert<double>(std::string);
 
