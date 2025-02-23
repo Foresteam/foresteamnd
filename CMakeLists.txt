@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.30.0)
 project(foresteamnd VERSION 0.1.0)
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -52,7 +52,8 @@ if (UNIX AND NOT APPLE)
     set(PLATFORM_LIBS pthread)
     add_compile_options(--std=g++17)
 elseif (WIN32)
-    set(PLATFORM_LIBS shlwapi)
+    add_compile_options(-std=c++17)
+    set(PLATFORM_LIBS shlwapi ws2_32)
 endif()
 
 target_link_libraries(foresteamnd ${PLATFORM_LIBS})

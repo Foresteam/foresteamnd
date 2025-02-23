@@ -3,14 +3,15 @@
 ```bash
 mkdir build
 cd build
-cmake ..
 ```
 ## Build (Linux)
 ```bash
+cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build . --config Release -j{NUMBER_OF_THREADS}
 ```
 ## Build (Windows)
 ```bash
+cmake -G "MinGW Makefiles" .. -DCMAKE_BUILD_TYPE=Release
 cmake --build . --target ALL_BUILD --config Release
 ```
 ## Install. System-wide, Linux only
@@ -23,3 +24,5 @@ sudo ./install
 chmod +x install_extract
 ./install_extract
 ```
+
+(rm -rf build; mkdir build; cd build; cmake -G "MinGW Makefiles" .. -DCMAKE_BUILD_TYPE=Release; NUMBER_OF_THREADS=24 cmake --build . --config Release -j ${NUMBER_OF_THREADS})

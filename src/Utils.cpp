@@ -157,6 +157,7 @@ std::string Utils::String::Convert(T value) {
 	return rs;
 }
 template std::string Utils::String::Convert<int>(int);
+template std::string Utils::String::Convert<unsigned short>(unsigned short);
 template std::string Utils::String::Convert<long int>(long int);
 template std::string Utils::String::Convert<size_t>(size_t);
 template std::string Utils::String::Convert<float>(float);
