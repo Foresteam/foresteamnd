@@ -65,9 +65,9 @@ if (UNIX AND NOT APPLE)
 elseif (WIN32)
     add_custom_target(create_includes ALL
         COMMAND "C:\\Program Files\\Git\\git-bash.exe" create_include.sh
-        WORKING_DIRECTORY ..
-        SOURCES ../src
-        BYPRODUCTS ../include
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/
+        SOURCES ${CMAKE_SOURCE_DIR}/src
+        BYPRODUCTS ${CMAKE_SOURCE_DIR}/include
     )
 endif()
 add_dependencies(foresteamnd create_includes)
