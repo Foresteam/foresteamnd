@@ -1,5 +1,4 @@
 #!/bin/bash
-mkdir extracted
 rm -rf include
 mkdir include
 mkdir include/foresteamnd

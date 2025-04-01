@@ -63,11 +63,15 @@ if (UNIX AND NOT APPLE)
         BYPRODUCTS ../include
     )
 elseif (WIN32)
+    find_program(GIT_BASH_EXE NAMES git-bash.exe PATHS "C:/Program Files/Git")
+    if(NOT GIT_BASH_EXE)
+        message(FATAL_ERROR "Git Bash not found")
+    endif()
     add_custom_target(create_includes ALL
-        COMMAND "C:\\Program Files\\Git\\git-bash.exe" create_include.sh
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/
-        SOURCES ${CMAKE_SOURCE_DIR}/src
-        BYPRODUCTS ${CMAKE_SOURCE_DIR}/include
+        COMMAND ${GIT_BASH_EXE} create_include.sh
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
+        SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src
+        BYPRODUCTS ${CMAKE_CURRENT_SOURCE_DIR}/include
     )
 endif()
 add_dependencies(foresteamnd create_includes)
