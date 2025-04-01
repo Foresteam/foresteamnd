@@ -47,7 +47,6 @@ else()
 endif()
 target_compile_features(foresteamnd PRIVATE cxx_std_17)
 
-
 if (UNIX AND NOT APPLE)
     set(PLATFORM_LIBS pthread)
     add_compile_options(--std=g++17)
@@ -55,6 +54,23 @@ elseif (WIN32)
     add_compile_options(-std=c++17)
     set(PLATFORM_LIBS shlwapi ws2_32)
 endif()
+
+if (UNIX AND NOT APPLE)
+    add_custom_target(create_includes ALL
+        COMMAND bash create_include.sh
+        WORKING_DIRECTORY ..
+        SOURCES ../src
+        BYPRODUCTS ../include
+    )
+elseif (WIN32)
+    add_custom_target(create_includes ALL
+        COMMAND "C:\\Program Files\\Git\\git-bash.exe" create_include.sh
+        WORKING_DIRECTORY ..
+        SOURCES ../src
+        BYPRODUCTS ../include
+    )
+endif()
+add_dependencies(foresteamnd create_includes)
 
 target_link_libraries(foresteamnd ${PLATFORM_LIBS})
 

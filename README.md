@@ -12,7 +12,7 @@ cmake --build . --config Release -j{NUMBER_OF_THREADS}
 ## Build (Windows)
 ```bash
 cmake -G "MinGW Makefiles" .. -DCMAKE_BUILD_TYPE=Release
-cmake --build . --target ALL_BUILD --config Release
+cmake --build . --config Release -j 24
 ```
 ## Install. System-wide, Linux only
 ```bash
