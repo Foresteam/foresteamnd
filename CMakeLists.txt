@@ -39,7 +39,7 @@ set(BUILD_FILES
     # src/TCPServer.cpp
 )
 
-if(CMAKE_BUILD_TYPE MATCHES Debug)
+if(CMAKE_BUILD_TYPE STREQUAL "Debug" AND NOT FORESTEAMND_BUILD_STATIC)
     list(APPEND BUILD_FILES main.cpp)
     add_executable(foresteamnd ${BUILD_FILES})
 else()

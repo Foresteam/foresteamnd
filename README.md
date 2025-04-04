@@ -11,8 +11,8 @@ cmake --build . --config Release -j{NUMBER_OF_THREADS}
 ```
 ## Build (Windows)
 ```bash
-cmake -G "MinGW Makefiles" .. -DCMAKE_BUILD_TYPE=Release
-cmake --build . --config Release -j 24
+cmake -G "Visual Studio 17 2022" .. -DCMAKE_BUILD_TYPE=Release
+NUMBER_OF_THREADS=24 cmake --build . --config Release -j ${NUMBER_OF_THREADS}
 ```
 ## Install. System-wide, Linux only
 ```bash
@@ -25,4 +25,4 @@ chmod +x install_extract
 ./install_extract
 ```
 
-(rm -rf build; mkdir build; cd build; cmake -G "MinGW Makefiles" .. -DCMAKE_BUILD_TYPE=Release; NUMBER_OF_THREADS=24 cmake --build . --config Release -j ${NUMBER_OF_THREADS})
+(rm -rf build; mkdir build; cd build; cmake -G "Visual Studio 17 2022" .. -DCMAKE_BUILD_TYPE=Release; NUMBER_OF_THREADS=24 cmake --build . --config Release -j ${NUMBER_OF_THREADS})
