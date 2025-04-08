@@ -22,12 +22,13 @@
 /// @brief An automatically reconnecting TCP client
 class TCPClient {
 public:
+  enum RetryPolicy { SILENT, THROW };
   static constexpr uint16_t buffer_size = 4096;
 
 private:
   char buffer[buffer_size];
+  RetryPolicy retryPolicy;
   bool debug;
-  long timeout_ms;
   /// @param dInitial Is the connection innitial, for debug message
   void Retry(bool dInitial = false);
   void LostConnection();
@@ -42,14 +43,14 @@ public:
   /// @deprecated used by the useless TCPServer (C++ seems to not be the best in this)
   TCPClient(PLATFORM_SOCKET socket, PLATFORM_ADDRESS address);
   /// @param host Either domain or IP
-  TCPClient(std::string host, uint16_t port, long timeout_ms = 5000, bool debug = false);
+  TCPClient(std::string host, uint16_t port, RetryPolicy retryPolicy, bool debug = false);
   TCPClient(const TCPClient& other);
   ~TCPClient();
   std::string GetHost() const;
   uint16_t GetPort() const;
 
-  /// @brief Acquires data through net. Keeps waiting, until the data is received. Automatically deletes the dynamic buffer. Interprets 1-length data with 0 as
-  /// empty
+  /// @brief Acquires data through net. Keeps waiting, until the data is received. Automatically deletes the dynamic buffer. Interprets 1-length data with 0
+  /// as empty
   /// @returns Data string
   std::string ReceiveData();
   /// @brief Acquires data through net. Keeps waiting, until the data is received

@@ -42,7 +42,7 @@ namespace PLATFORM {
     closesocket(socket);
     socket = INVALID_SOCKET;
   }
-  bool SetSocketTimeout(PLATFORM_SOCKET socket, long timeout_ms) {
+  bool SetSocketTimeout(PLATFORM_SOCKET& socket, DWORD timeout_ms) {
     if (setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&timeout_ms, sizeof(timeout_ms)) == SOCKET_ERROR) {
       return false;
     }
@@ -51,7 +51,7 @@ namespace PLATFORM {
     }
     return true;
   }
-  void OpenConnection(PLATFORM_SOCKET& _socket, PLATFORM_ADDRESS& hints, std::string ip, uint16_t port, long timeout_ms = 5000) {
+  void OpenConnection(PLATFORM_SOCKET& _socket, PLATFORM_ADDRESS& hints, std::string ip, uint16_t port, DWORD timeout_ms = 5000) {
     WSInit();
     int iResult;
     PLATFORM_ADDRESS* addrinfo = nullptr;
@@ -147,12 +147,14 @@ void TCPClient::Retry(bool dInitial) {
     else
       printf("Retrying...\n");
   }
-  PLATFORM::OpenConnection(_socket, _address, ResolveIP(_host), _port, timeout_ms);
+  PLATFORM::OpenConnection(_socket, _address, ResolveIP(_host), _port);
 }
 void TCPClient::LostConnection() {
   PLATFORM::CloseConnection(_socket);
   if (debug)
     printf("Connection lost\n");
+  if (retryPolicy == RetryPolicy::THROW)
+    throw runtime_error("Connection lost");
 }
 char* TCPClient::ReceiveRawData(size_t* sz) {
   Retry(false);
@@ -166,6 +168,7 @@ char* TCPClient::ReceiveRawData(size_t* sz) {
   memset(buf, 0, bufSz + 1);
   // receive data of the actual size
   if (PLATFORM::Recv(_socket, buf, bufSz, 0) == SOCKET_ERROR) {
+    delete[] buf;
     LostConnection();
     return nullptr;
   }
@@ -196,10 +199,10 @@ bool TCPClient::SendData(const char* data, size_t size) {
 }
 bool TCPClient::SendData(std::string data) { return SendData(data.c_str(), data.length()); }
 TCPClient::TCPClient(PLATFORM_SOCKET socket, PLATFORM_ADDRESS address) : _socket(socket), _address(address) {}
-TCPClient::TCPClient(const TCPClient& other) : TCPClient(other._host, other._port, other.debug) {}
-TCPClient::TCPClient(std::string host, uint16_t port, long timeout_ms, bool debug) {
+TCPClient::TCPClient(const TCPClient& other) : TCPClient(other._host, other._port, other.retryPolicy, other.debug) {}
+TCPClient::TCPClient(std::string host, uint16_t port, RetryPolicy retryPolicy, bool debug) {
+  this->retryPolicy = retryPolicy;
   this->debug = debug;
-  this->timeout_ms = timeout_ms;
   _socket = INVALID_SOCKET;
   _host = host;
   _port = port;
