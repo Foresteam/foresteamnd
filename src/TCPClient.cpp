@@ -1,9 +1,9 @@
 #include "TCPClient.h"
-#include <cstring>
-#include <chrono>
-#include <thread>
-#include <iostream>
 #include "Utils.h"
+#include <chrono>
+#include <cstring>
+#include <iostream>
+#include <thread>
 using namespace std;
 
 #ifdef _WIN32
@@ -11,8 +11,8 @@ using namespace std;
 #pragma comment(lib, "Mswsock.lib")
 #pragma comment(lib, "AdvApi32.lib")
 #else
-#include <netdb.h>
 #include <arpa/inet.h>
+#include <netdb.h>
 #endif
 
 #ifndef INVALID_SOCKET
@@ -27,173 +27,213 @@ using namespace std;
 
 #ifdef _WIN32
 void WSInit() {
-	WSADATA data;
-	if (WSAStartup(MAKEWORD(1, 1), &data) != 0) {
-		fputs("Could not initialise Winsock.\n", stderr);
-		exit(1);
-	}
+  WSADATA data;
+  if (WSAStartup(MAKEWORD(1, 1), &data) != 0) {
+    fputs("Could not initialise Winsock.\n", stderr);
+    exit(1);
+  }
 }
 namespace PLATFORM {
-	void CloseConnection(PLATFORM_SOCKET& socket) {
-		WSACleanup();
-		if (socket == INVALID_SOCKET)
-			return;
-		shutdown(socket, 0);
-		closesocket(socket);
-		socket = INVALID_SOCKET;
-	}
-	void OpenConnection(PLATFORM_SOCKET& _socket, PLATFORM_ADDRESS& hints, std::string ip, uint16_t port) {
-		WSInit();
-		int iResult;
-		PLATFORM_ADDRESS* addrinfo = nullptr;
-		ZeroMemory(&hints, sizeof(hints));
-		hints.ai_family = AF_INET;
-		hints.ai_socktype = SOCK_STREAM;
-		hints.ai_protocol = IPPROTO_TCP;
-		
-		if (iResult = getaddrinfo(ip.c_str(), Utils::String::Convert(port).c_str(), &hints, &addrinfo)) {
-			CloseConnection(_socket);
-			return;
-		}
-		_socket = socket(addrinfo->ai_family, addrinfo->ai_socktype, addrinfo->ai_protocol);
-		if (_socket == INVALID_SOCKET) {
-			CloseConnection(_socket);
-			return;
-		}
-		if ((iResult = connect(_socket, addrinfo->ai_addr, (int)addrinfo->ai_addrlen)) == SOCKET_ERROR)
-			CloseConnection(_socket);
-		freeaddrinfo(addrinfo);
-	}
-	size_t Recv(PLATFORM_SOCKET socket, char* buf, int buf_sz, int flags) {
-		return recv(socket, buf, buf_sz, flags);
-	}
-	int __stdcall Send(PLATFORM_SOCKET socket, char* buf, int buf_sz, int flags) {
-		return send(socket, buf, buf_sz, flags);
-	}
-}
+  void CloseConnection(PLATFORM_SOCKET& socket) {
+    WSACleanup();
+    if (socket == INVALID_SOCKET)
+      return;
+    shutdown(socket, 0);
+    closesocket(socket);
+    socket = INVALID_SOCKET;
+  }
+  bool SetSocketTimeout(PLATFORM_SOCKET socket, long timeout_ms) {
+    if (setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&timeout_ms, sizeof(timeout_ms)) == SOCKET_ERROR) {
+      return false;
+    }
+    if (setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO, (const char*)&timeout_ms, sizeof(timeout_ms)) == SOCKET_ERROR) {
+      return false;
+    }
+    return true;
+  }
+  void OpenConnection(PLATFORM_SOCKET& _socket, PLATFORM_ADDRESS& hints, std::string ip, uint16_t port, long timeout_ms = 5000) {
+    WSInit();
+    int iResult;
+    PLATFORM_ADDRESS* addrinfo = nullptr;
+    ZeroMemory(&hints, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+
+    if (iResult = getaddrinfo(ip.c_str(), std::to_string(port).c_str(), &hints, &addrinfo)) {
+      CloseConnection(_socket);
+      return;
+    }
+
+    _socket = socket(addrinfo->ai_family, addrinfo->ai_socktype, addrinfo->ai_protocol);
+    if (_socket == INVALID_SOCKET) {
+      freeaddrinfo(addrinfo);
+      CloseConnection(_socket);
+      return;
+    }
+
+    // Set socket to non-blocking mode for connect timeout
+    unsigned long mode = 1;
+    ioctlsocket(_socket, FIONBIO, &mode);
+
+    // Try to connect
+    iResult = connect(_socket, addrinfo->ai_addr, (int)addrinfo->ai_addrlen);
+    if (iResult == SOCKET_ERROR) {
+      if (WSAGetLastError() != WSAEWOULDBLOCK) {
+        freeaddrinfo(addrinfo);
+        CloseConnection(_socket);
+        return;
+      }
+
+      // Wait for connection with timeout
+      fd_set set;
+      FD_ZERO(&set);
+      FD_SET(_socket, &set);
+
+      timeval timeout;
+      timeout.tv_sec = timeout_ms / 1000;
+      timeout.tv_usec = (timeout_ms % 1000) * 1000;
+
+      iResult = select(0, nullptr, &set, nullptr, &timeout);
+      if (iResult <= 0) {
+        // Timeout or error occurred
+        freeaddrinfo(addrinfo);
+        CloseConnection(_socket);
+        return;
+      }
+    }
+
+    // Set socket back to blocking mode
+    mode = 0;
+    ioctlsocket(_socket, FIONBIO, &mode);
+
+    // Set socket timeouts for send/recv operations
+    if (!SetSocketTimeout(_socket, timeout_ms)) {
+      freeaddrinfo(addrinfo);
+      CloseConnection(_socket);
+      return;
+    }
+
+    freeaddrinfo(addrinfo);
+  }
+  size_t Recv(PLATFORM_SOCKET socket, char* buf, int buf_sz, int flags) { return recv(socket, buf, buf_sz, flags); }
+  int __stdcall Send(PLATFORM_SOCKET socket, char* buf, int buf_sz, int flags) { return send(socket, buf, buf_sz, flags); }
+} // namespace PLATFORM
 #else
 namespace PLATFORM {
-	void CloseConnection(PLATFORM_SOCKET& socket) {
-		shutdown(socket, 0);
-		close(socket);
-		socket = INVALID_SOCKET;
-	}
-	void OpenConnection(PLATFORM_SOCKET& _socket, PLATFORM_ADDRESS& address, std::string ip, uint16_t port) {
-		_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-		address.sin_family = AF_INET;
-		address.sin_port = htons(port);
-		inet_pton(AF_INET, ip.c_str(), &address.sin_addr);
-		connect(_socket, (struct sockaddr*)&address, sizeof(address));
-	}
-	ssize_t Recv(PLATFORM_SOCKET socket, void* buf, size_t buf_sz, int flags) {
-		return recv(socket, buf, buf_sz, flags);
-	}
-	ssize_t Send(PLATFORM_SOCKET socket, void* buf, size_t buf_sz, int flags) {
-		return send(socket, buf, buf_sz, flags);
-	}
-}
+  void CloseConnection(PLATFORM_SOCKET& socket) {
+    shutdown(socket, 0);
+    close(socket);
+    socket = INVALID_SOCKET;
+  }
+  void OpenConnection(PLATFORM_SOCKET& _socket, PLATFORM_ADDRESS& address, std::string ip, uint16_t port) {
+    _socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    address.sin_family = AF_INET;
+    address.sin_port = htons(port);
+    inet_pton(AF_INET, ip.c_str(), &address.sin_addr);
+    connect(_socket, (struct sockaddr*)&address, sizeof(address));
+  }
+  ssize_t Recv(PLATFORM_SOCKET socket, void* buf, size_t buf_sz, int flags) { return recv(socket, buf, buf_sz, flags); }
+  ssize_t Send(PLATFORM_SOCKET socket, void* buf, size_t buf_sz, int flags) { return send(socket, buf, buf_sz, flags); }
+} // namespace PLATFORM
 #endif
 
-
 void TCPClient::Retry(bool dInitial) {
-	if (_socket != INVALID_SOCKET)
-		return;
-	if (debug) {
-		if (dInitial)
-			printf("Connecting...\n");
-		else
-			printf("Retrying...\n");
-	}
-	PLATFORM::OpenConnection(_socket, _address, ResolveIP(_host), _port);
+  if (_socket != INVALID_SOCKET)
+    return;
+  if (debug) {
+    if (dInitial)
+      printf("Connecting...\n");
+    else
+      printf("Retrying...\n");
+  }
+  PLATFORM::OpenConnection(_socket, _address, ResolveIP(_host), _port, timeout_ms);
 }
 void TCPClient::LostConnection() {
-	PLATFORM::CloseConnection(_socket);
-	if (debug)
-		printf("Connection lost\n");
+  PLATFORM::CloseConnection(_socket);
+  if (debug)
+    printf("Connection lost\n");
 }
 char* TCPClient::ReceiveRawData(size_t* sz) {
-	Retry(false);
-	size_t bufSz;
-	// receive the size first
-	if (PLATFORM::Recv(_socket, reinterpret_cast<char*>(&bufSz), sizeof(size_t), 0) == SOCKET_ERROR) {
-		LostConnection();
-		return nullptr;
-	}
-	char* buf = new char[bufSz + 1];
-	memset(buf, 0, bufSz + 1);
-	// receive data of the actual size
-	if (PLATFORM::Recv(_socket, buf, bufSz, 0) == SOCKET_ERROR) {
-		LostConnection();
-		return nullptr;
-	}
-	if (sz)
-		*sz = bufSz;
-	return buf;
+  Retry(false);
+  size_t bufSz;
+  // receive the size first
+  if (PLATFORM::Recv(_socket, reinterpret_cast<char*>(&bufSz), sizeof(size_t), 0) == SOCKET_ERROR) {
+    LostConnection();
+    return nullptr;
+  }
+  char* buf = new char[bufSz + 1];
+  memset(buf, 0, bufSz + 1);
+  // receive data of the actual size
+  if (PLATFORM::Recv(_socket, buf, bufSz, 0) == SOCKET_ERROR) {
+    LostConnection();
+    return nullptr;
+  }
+  if (sz)
+    *sz = bufSz;
+  return buf;
 }
 std::string TCPClient::ReceiveData() {
-	size_t sz;
-	char* buf = ReceiveRawData(&sz);
-	if (!buf)
-		return "";
-	std::string rs = (sz == 1 && *buf == 0) ? "" : std::string(buf, sz);
-	delete[] buf;
-	return rs;
+  size_t sz;
+  char* buf = ReceiveRawData(&sz);
+  if (!buf)
+    return "";
+  std::string rs = (sz == 1 && *buf == 0) ? "" : std::string(buf, sz);
+  delete[] buf;
+  return rs;
 }
 bool TCPClient::SendData(const char* data, size_t size) {
-	Retry(false);
-	size_t offset = 0, sent;
-	while (offset < size)
-		if ((sent = PLATFORM::Send(_socket, const_cast<char*>(data + offset), size - offset, MSG_NOSIGNAL)) == (size_t)SOCKET_ERROR) {
-			LostConnection();
-			return false;
-		}
-		else
-			offset += sent;
-	return true;
+  Retry(false);
+  size_t offset = 0, sent;
+  while (offset < size)
+    if ((sent = PLATFORM::Send(_socket, const_cast<char*>(data + offset), size - offset, MSG_NOSIGNAL)) == (size_t)SOCKET_ERROR) {
+      LostConnection();
+      return false;
+    }
+    else
+      offset += sent;
+  return true;
 }
-bool TCPClient::SendData(std::string data) {
-	return SendData(data.c_str(), data.length());
-}
+bool TCPClient::SendData(std::string data) { return SendData(data.c_str(), data.length()); }
 TCPClient::TCPClient(PLATFORM_SOCKET socket, PLATFORM_ADDRESS address) : _socket(socket), _address(address) {}
 TCPClient::TCPClient(const TCPClient& other) : TCPClient(other._host, other._port, other.debug) {}
-TCPClient::TCPClient(std::string host, uint16_t port, bool debug) {
-	this->debug = debug;
-	_socket = INVALID_SOCKET;
-	_host = host;
-	_port = port;
-	Retry(true);
+TCPClient::TCPClient(std::string host, uint16_t port, long timeout_ms, bool debug) {
+  this->debug = debug;
+  this->timeout_ms = timeout_ms;
+  _socket = INVALID_SOCKET;
+  _host = host;
+  _port = port;
+  Retry(true);
 }
 
-TCPClient::~TCPClient() {
-	PLATFORM::CloseConnection(_socket);
-}
+TCPClient::~TCPClient() { PLATFORM::CloseConnection(_socket); }
 
 std::string TCPClient::GetHost() const { return _host; }
 uint16_t TCPClient::GetPort() const { return _port; }
 
 std::string TCPClient::ResolveIP(std::string host) {
 #ifdef _WIN32
-	WSInit();
+  WSInit();
 #endif
-	struct hostent* he = gethostbyname(host.c_str());
-	if (he == NULL)
-		switch (h_errno) {
-		case HOST_NOT_FOUND:
-			fputs("The host was not found.\n", stderr);
-			return "";
-		case NO_ADDRESS:
-			fputs("The name is valid but it has no address.\n", stderr);
-			return "";
-		case NO_RECOVERY:
-			fputs("A non-recoverable name server error occurred.\n", stderr);
-			return "";
-		case TRY_AGAIN:
-			fputs("The name server is temporarily unavailable.", stderr);
-			return "";
-		}
-	std::string result = inet_ntoa(*((struct in_addr*)he->h_addr_list[0]));
+  struct hostent* he = gethostbyname(host.c_str());
+  if (he == NULL)
+    switch (h_errno) {
+    case HOST_NOT_FOUND:
+      fputs("The host was not found.\n", stderr);
+      return "";
+    case NO_ADDRESS:
+      fputs("The name is valid but it has no address.\n", stderr);
+      return "";
+    case NO_RECOVERY:
+      fputs("A non-recoverable name server error occurred.\n", stderr);
+      return "";
+    case TRY_AGAIN:
+      fputs("The name server is temporarily unavailable.", stderr);
+      return "";
+    }
+  std::string result = inet_ntoa(*((struct in_addr*)he->h_addr_list[0]));
 #ifdef _WIN32
-	WSACleanup();
+  WSACleanup();
 #endif
-	return result;
+  return result;
 }
