@@ -185,7 +185,7 @@ std::string TCPClient::ReceiveData() {
   delete[] buf;
   return rs;
 }
-bool TCPClient::SendData(const char* data, size_t size) {
+bool TCPClient::_SendData(const char* data, size_t size) {
   Retry(false);
   size_t offset = 0, sent;
   while (offset < size)
@@ -196,6 +196,10 @@ bool TCPClient::SendData(const char* data, size_t size) {
     else
       offset += sent;
   return true;
+}
+bool TCPClient::SendData(const char* data, size_t size) {
+  // now sends size as well
+  return _SendData(reinterpret_cast<char*>(&size), sizeof size_t) && _SendData(data, size);
 }
 bool TCPClient::SendData(std::string data) { return SendData(data.c_str(), data.length()); }
 TCPClient::TCPClient(PLATFORM_SOCKET socket, PLATFORM_ADDRESS address) : _socket(socket), _address(address) {}
