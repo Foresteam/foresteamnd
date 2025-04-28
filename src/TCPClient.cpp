@@ -201,7 +201,7 @@ bool TCPClient::SendData(const char* data, size_t size) {
   // now sends size as well
   return SendDataRaw(reinterpret_cast<char*>(&size), sizeof size_t) && SendDataRaw(data, size);
 }
-bool TCPClient::SendData(std::vector<std::pair<char*, size_t>>& data) {
+bool TCPClient::SendData(const std::vector<std::pair<char*, size_t>>& data) {
   size_t totalSize = 0;
   for (size_t i = 0; i < data.size(); i++)
     totalSize += data[i].second;
@@ -211,7 +211,7 @@ bool TCPClient::SendData(std::vector<std::pair<char*, size_t>>& data) {
     result &= SendDataRaw(data[i].first, data[i].second);
   return result;
 }
-bool TCPClient::SendData(std::string data) { return SendData(data.c_str(), data.length()); }
+bool TCPClient::SendData(const std::string& data) { return SendData(data.c_str(), data.length()); }
 TCPClient::TCPClient(PLATFORM_SOCKET socket, PLATFORM_ADDRESS address) : _socket(socket), _address(address) {}
 TCPClient::TCPClient(const TCPClient& other) : TCPClient(other._host, other._port, other.retryPolicy, other.debug) {}
 TCPClient::TCPClient(std::string host, uint16_t port, RetryPolicy retryPolicy, bool debug) {

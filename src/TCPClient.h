@@ -66,8 +66,8 @@ public:
   bool SendData(const char* data, size_t size);
   /// @brief Sends size of `data`, then `data`
   /// @returns True if data was sent successfully, false otherwise
-  bool SendData(std::string data);
+  bool SendData(const std::string& data);
   /// @brief Sends multiple buffers as a single message
   /// @returns True if data was sent successfully, false otherwise
-  bool SendData(std::vector<std::pair<char*, size_t>>& data);
+  bool SendData(const std::vector<std::pair<char*, size_t>>& data);
 };
