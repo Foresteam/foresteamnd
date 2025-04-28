@@ -201,7 +201,7 @@ bool TCPClient::SendData(const char* data, size_t size) {
   // now sends size as well
   return SendDataRaw(reinterpret_cast<char*>(&size), sizeof size_t) && SendDataRaw(data, size);
 }
-bool TCPClient::SendData(const std::vector<std::pair<char*, size_t>>& data) {
+bool TCPClient::SendData(const std::vector<std::pair<const char*, size_t>>& data) {
   size_t totalSize = 0;
   for (size_t i = 0; i < data.size(); i++)
     totalSize += data[i].second;
