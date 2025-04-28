@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <string>
+#include <vector>
 
 #ifdef _WIN32 // Windows NT
 #include <WinSock2.h>
@@ -66,4 +67,7 @@ public:
   /// @brief Sends size of `data`, then `data`
   /// @returns True if data was sent successfully, false otherwise
   bool SendData(std::string data);
+  /// @brief Sends multiple buffers as a single message
+  /// @returns True if data was sent successfully, false otherwise
+  bool SendData(std::vector<std::pair<char*, size_t>>& data);
 };
