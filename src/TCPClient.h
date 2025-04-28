@@ -32,7 +32,6 @@ private:
   /// @param dInitial Is the connection innitial, for debug message
   void Retry(bool dInitial = false);
   void LostConnection();
-  bool _SendData(const char* data, size_t size);
   std::string _host;
   uint16_t _port;
   PLATFORM_SOCKET _socket;
@@ -58,6 +57,9 @@ public:
   /// @returns Dynamic char buffer
   char* ReceiveRawData(size_t* sz = nullptr);
 
+  /// @brief Raw send function, no protocol-specific logic (just sends `data` over the network)
+  /// @returns true if data was sent successfully
+  bool SendDataRaw(const char* data, size_t size);
   /// @brief "Raw" send function. Sends size of `data`, then `data`
   /// @returns true if data was sent successfully
   bool SendData(const char* data, size_t size);
