@@ -72,6 +72,15 @@ namespace PLATFORM {
       return;
     }
 
+    // ====== ADDED TCP_NODELAY ======
+    int nodelay = 1; // 1 = enable (disable Nagle's algorithm)
+    if (setsockopt(_socket, IPPROTO_TCP, TCP_NODELAY, (char*)&nodelay, sizeof(nodelay)) == SOCKET_ERROR) {
+      freeaddrinfo(addrinfo);
+      CloseConnection(_socket);
+      return;
+    }
+    // ===============================
+
     // Set socket to non-blocking mode for connect timeout
     unsigned long mode = 1;
     ioctlsocket(_socket, FIONBIO, &mode);
