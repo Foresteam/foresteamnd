@@ -116,7 +116,45 @@ namespace PLATFORM {
 
     freeaddrinfo(addrinfo);
   }
-  size_t Recv(PLATFORM_SOCKET socket, char* buf, int buf_sz, int flags) { return recv(socket, buf, buf_sz, flags); }
+  size_t Recv(PLATFORM_SOCKET socket, char* buf, size_t buf_sz, int flags) {
+    size_t total_received = 0;
+    while (total_received < buf_sz) {
+      // Calculate remaining buffer space
+      size_t remaining = buf_sz - total_received;
+
+// For Windows, cast remaining to int (since WinSock uses int)
+#ifdef _WIN32
+      int recv_sz = (remaining > INT_MAX) ? INT_MAX : static_cast<int>(remaining);
+#else
+      size_t recv_sz = remaining;
+#endif
+
+      // Receive data
+      auto rc = recv(socket, buf + total_received, recv_sz, flags);
+
+      if (rc > 0)
+        total_received += rc;
+      else if (rc == 0) {
+        // Connection closed by peer
+        break;
+      }
+      else {
+        // Error handling (EINTR = interrupted, try again)
+        if (errno == EINTR ||
+#ifdef _WIN32
+            WSAGetLastError() == WSAEINTR
+#else
+            false
+#endif
+        ) {
+          continue; // Retry if interrupted
+        }
+        return SOCKET_ERROR; // Real error
+      }
+    }
+
+    return total_received;
+  }
   int __stdcall Send(PLATFORM_SOCKET socket, char* buf, int buf_sz, int flags) { return send(socket, buf, buf_sz, flags); }
 } // namespace PLATFORM
 #else
@@ -164,8 +202,8 @@ char* TCPClient::ReceiveRawData(size_t* sz) {
     LostConnection();
     return nullptr;
   }
-  char* buf = new char[bufSz + 1];
-  memset(buf, 0, bufSz + 1);
+  char* buf = new char[bufSz];
+  memset(buf, 0, bufSz);
   // receive data of the actual size
   if (PLATFORM::Recv(_socket, buf, bufSz, 0) == SOCKET_ERROR) {
     delete[] buf;
